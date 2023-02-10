@@ -17,7 +17,8 @@ from uuid import uuid4  # Unique key generator
 def formatDate():
     Owned_Items_Dict = {}
     try:
-        Owned_Items_Database = shelve.open('website/databases/Owned_Items/ownedItems.db', 'c')
+        Owned_Items_Database = shelve.open(
+            'website/databases/Owned_Items/ownedItems.db', 'c')
 
         if str(current_user.id) in Owned_Items_Database:
             Owned_Items_Dict = Owned_Items_Database[str(current_user.id)]
@@ -33,6 +34,5 @@ def formatDate():
         print(f"An unknown error has occurred,{e}")
 
     for i in Owned_Items_Dict
-
 
     return Owned_Items_Dict

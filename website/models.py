@@ -27,8 +27,10 @@ class User(db.Model, UserMixin):
     usertype = db.Column(db.String(120))
     # the id unique to each user so that flask can identify each individual user
     username = db.Column(db.String(length=30), nullable=False, unique=True)
-    email_address = db.Column(db.String(length=50), nullable=False, unique=True)
-    password_hash = db.Column(db.String(length=60), nullable=False, unique=True)
+    email_address = db.Column(db.String(length=50),
+                              nullable=False, unique=True)
+    password_hash = db.Column(db.String(length=60),
+                              nullable=False, unique=True)
     profile_pic = db.Column(db.String(), nullable=True)
     description = db.Column(db.Text(), nullable=True)
     # the mostly used hashing algorithm that flask allow us to use
@@ -67,7 +69,8 @@ class User(db.Model, UserMixin):
     # return password
     @password.setter
     def password(self, plain_text_password):
-        self.password_hash = bcrypt.generate_password_hash(plain_text_password).decode('utf-8')
+        self.password_hash = bcrypt.generate_password_hash(
+            plain_text_password).decode('utf-8')
 
     # hashes the password entered by users creating new accounts
 
@@ -93,10 +96,11 @@ class User(db.Model, UserMixin):
         return otp
 
 
-
 class Retail:
     count_id = 0
-    def __init__(self, id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered):#, map_url):
+
+    # , map_url):
+    def __init__(self, id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered):
         Retail.count_id += 1
         self.__id = id
         self.__count_id = Retail.count_id
@@ -114,7 +118,7 @@ class Retail:
         return self.__id
 
     def get_count_id(self):
-        return self.__count_id 
+        return self.__count_id
 
     def get_company_id(self):
         return self.__company_id
@@ -139,7 +143,7 @@ class Retail:
 
     def get_date_registered(self):
         return self.__date_registered
-    
+
     '''
     def get_map_url(self):
         return self.__map_url
@@ -176,15 +180,18 @@ class Retail:
         self.__map_url = map_url
     '''
 
+
 class Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     img = db.Column(db.Text, nullable=False)
     name = db.Column(db.Text, nullable=False)
     mimetype = db.Column(db.Text, nullable=False)
 
+
 class Item_Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     img = db.Column(db.String(), nullable=False)
+
 
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -195,6 +202,7 @@ class Photo(db.Model):
 
 class Item:
     count_id = 0
+
     def __init__(self, id, name, quantity, description, price, owner, owner_id, image):
         Item.count_id += 1
         self.__count_id = Item.count_id
@@ -303,10 +311,10 @@ class Staff:
 
     def get_id(self):
         return self.__id
-    
+
     def get_staff_count(self):
         return self.__staff_count
-    
+
     def get_staff_id(self):
         return self.__staff_id
 
@@ -511,7 +519,7 @@ class warranty:
 
     def get_warranty_remarks(self):
         return self.__remarks
-    
+
     def get_warranty_UUID(self):
         return self.__UUID
 
@@ -520,22 +528,22 @@ class warranty:
 
     def get_phone_number(self):
         return self.__phone_number
-    
+
     def get_date_recorded(self):
         return self.__date_recorded
-    
+
     def get_warranty_recorded(self):
         return self.__warranty_recorded
-    
+
     def get_time_recorded(self):
         return self.__time_recorded
-    
+
     def get_PostalCode(self):
         return self.__PostalCode
-    
+
     def get_Address(self):
         return self.__Address
-    
+
     def get_delivery_status(self):
         return self.__delivery_status
 
@@ -553,19 +561,19 @@ class warranty:
 
     def set_phone_number(self, phone_number):
         self.__phone_number = phone_number
-        
+
     def set_date_recorded(self, date_recorded):
         self.__date_recorded = date_recorded
-        
+
     def set_time_recorded(self, time_recorded):
         self.__time_recorded = time_recorded
-        
+
     def set_warranty_recorded(self, warranty_recorded):
         self.__warranty_recorded = warranty_recorded
-        
+
     def set_PostalCode(self, PostalCode):
         self.__PostalCode = PostalCode
-    
+
     def set_Address(self, Address):
         self.__Address = Address
 
@@ -767,6 +775,7 @@ class Feedback(Message):
     def set_title(self, title):
         self.__title = title
 
+
 class Location:
     def __init__(self, location_id, location):
         self.__location_id = location_id
@@ -777,6 +786,6 @@ class Location:
 
     def get_location(self):
         return self.__location
-    
+
     def set_location(self, location):
         self.__location = location

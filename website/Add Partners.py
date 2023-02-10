@@ -16,16 +16,16 @@ except Exception as e:
 
 else:
     while True:
-        choice = input("Create Partner(1), Check Partner database(2), Delete Partner(3), Save Changes & Exit(4): ")
+        choice = input(
+            "Create Partner(1), Check Partner database(2), Delete Partner(3), Save Changes & Exit(4): ")
         if choice == '1':
             name = input("Enter Partner's Company Name: ")
             location = input("Enter Partner's Company Location: ")
-            partner = Partners(name,location)
+            partner = Partners(name, location)
             partners[partner.get_id()] = partner
             print("Partners database")
             for i in partners:
                 print(f"{partners[i]}")
-
 
         elif choice == '2':
             for i in partners:
@@ -41,9 +41,7 @@ else:
             if choice in partners:
                 del partners[choice]
 
-
         elif choice == '4':
             db_shelve['partnerinfo'] = partners
             db_shelve.close()
             exit()
-

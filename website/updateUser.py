@@ -3,20 +3,20 @@ from flask import render_template, request, flash, redirect, url_for
 from website.models import User
 from website.forms import RegisterForm, LoginForm
 from website import db, bcrypt
-from flask_login import login_user,logout_user, login_required
+from flask_login import login_user, logout_user, login_required
+
 
 def updateUser(id):
-    userID = User.query.filter_by(id = id).first()
+    userID = User.query.filter_by(id=id).first()
     # userID.admin = 1
 
     # For password
-    userID.password_hash = bcrypt.generate_password_hash('admin123').decode('utf-8')
+    userID.password_hash = bcrypt.generate_password_hash(
+        'admin123').decode('utf-8')
     # For Email
 
     db.session.commit()
     return userID.username
-
-
 
 
 print(updateUser(1))

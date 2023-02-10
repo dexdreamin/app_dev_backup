@@ -8,10 +8,7 @@ export default defineConfig({
   plugins: [
     solid(),
     UnoCSS({
-      presets: [
-        presetWind(),
-        presetUno(),
-      ],
+      presets: [presetWind(), presetUno()],
     }),
   ],
 });
