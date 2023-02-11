@@ -4618,3 +4618,42 @@ def Place_Page():
 @app.route('/index')
 def index_page():
     return render_template('index_page.html')
+
+
+@app.route('/blog', methods=['GET', 'POST'])
+def blog():
+    db = shelve.open('blog.db')
+    blogs = db.get('blogs', [])
+    if request.method == 'POST':
+        if request.form.get('blog'):
+            blogs.append({
+                'text': request.form['blog'],
+                'comments': []
+            })
+        elif request.form.get('comment'):
+            blog_id = int(request.form['blog_id'])
+            blogs[blog_id - 1]['comments'].append(request.form['comment'])
+        db['blogs'] = blogs
+    db.close()
+    return render_template('blog.html', blogs=blogs)
+
+@app.route('/like', methods=['POST'])
+def like():
+    # Open the like.db shelve file
+    db = shelve.open('like.db', 'c')
+    
+    # Get the blog id and like count
+    blog_id = request.form['blog_id']
+    likes = db.get(blog_id, 0)
+    
+    # Increment the like count
+    likes += 1
+    
+    # Store the updated like count in the like.db file
+    db[blog_id] = likes
+    
+    # Close the like.db file
+    db.close()
+    
+    # Return the updated like count
+    return str(likes)
