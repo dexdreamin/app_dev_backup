@@ -1,21 +1,18 @@
-{% if current_user.admin == 1 %}
-{% extends "base.html" %}
-{% else %}
-{% extends "based.html" %}
-{% endif %}
-{% block title %}Update Retailer {% endblock %}
-
-{% block content %}
+{% if current_user.admin == 1 %} {% extends "base.html" %} {% else %} {% extends
+"based.html" %} {% endif %} {% block title %}Update Retailer {% endblock %} {%
+block content %}
 <style>
-  .smalling{width:50%}
+  .smalling {
+    width: 50%;
+  }
 </style>
 <div class="container-fluid smalling">
   <h1>Update Retailer</h1>
   <form class="user" method="POST">
-      {{ form.hidden_tag() }}
-      <!--This flask built in tag protects our site
+    {{ form.hidden_tag() }}
+    <!--This flask built in tag protects our site
       from Cross Site Request Forgery (CSRF) Attack -->
-      <!--this attack basically may attack or steal
+    <!--this attack basically may attack or steal
       your database -->
 
       <div class="form-group row">
