@@ -1283,19 +1283,19 @@
               <a class="dropdown-item" href="{{ url_for('Inventory_Management') }}">Inventory</a>
               <div class="dropdown-divider"></div><a class="dropdown-item" style="display:none;" href="{{ url_for('wish_list') }}">My wishlist </a>
               <a class="dropdown-item" href="{{ url_for('retail_information', id=current_user.retailer_id) }}">Your profile info</a>
-              <a class="dropdown-item" href="{{ url_for('add_location_pic', id=current_user.retailer_id) }}">Add location picture</a>
-              <a class="dropdown-item" href="{{ url_for('location_add', id=current_user.retailer_id) }}">Add location</a>
+              <a class="dropdown-item" href="{{ url_for('update_location_pic', id=current_user.retailer_id) }}">Update location picture</a>
               <a class="dropdown-item" href="{{ url_for('location_edit', id=current_user.retailer_id) }}">Edit Location </a>
               <a class="dropdown-item" href="{{ url_for('location', id=current_user.retailer_id) }}">Your Location</a>
             </div>
           </li>
-        </ul>
+        
         {% endif %}
+      </ul>
         <form class="d-lg-flex ms-auto me-lg-7 me-xl-6 my-4 my-lg-0" action="{{ url_for('market_page') }}" method="GET"
                         class="d-none d-sm-inline-block form-inline mx-auto ml-md-3 my-2 my-md-0 mw-200 navbar-search">
                         <div class="input-group">
                             <input name="search" type="text" class="form-control bg-light border-1 large" placeholder="Search for something in market"
-                                aria-label="Search" aria-describedby="basic-addon2">
+                                aria-label="Search" aria-describedby="basic-addon2" style="width: 300px;">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>

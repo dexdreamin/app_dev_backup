@@ -4234,8 +4234,7 @@ def retrieve_retailers():
 def create_retailer():
     register_retailer_form = RegisterRetailerForm()
     db_shelve = shelve.open('website/databases/retailer/retailer.db', 'c')
-    db_shelve_uniqueID = shelve.open(
-        'website/databases/retailer/retailer_id_db', 'c')
+    db_shelve_uniqueID = shelve.open('website/databases/retailer/retailer_id_db', 'c')
     retailer_dict = {}
     ids = 0
     try:
@@ -4253,11 +4252,27 @@ def create_retailer():
     if request.method == 'POST':
         if register_retailer_form.validate_on_submit():
             current_time = datetime.now()
+            if request.files['location_pic']:
+                    location_pic = request.files['location_pic']
+                    retailer = retailer_dict.get(id)
+                    # Grab Image Name
+                    pic_filename = secure_filename(location_pic.filename)
+                    # Set UUID
+                    pic_name = str(uuid1()) + "_" + pic_filename
+                    # Save That Image
+                    saver = request.files['location_pic']
+
+                    #current_id = retailer.get_retailer_id()
+
+                    # Change it to a string to save to db
+                    saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
             retailer = Retail(id, register_retailer_form.company_id.data, register_retailer_form.shop.data, register_retailer_form.postal_code.data,
                               register_retailer_form.unit_number.data, register_retailer_form.address.data,
                               register_retailer_form.office_no.data, register_retailer_form.email_address.data,
-                              current_time.year)
+                              current_time.year, register_retailer_form.location.data, pic_name)
             ids += 1
+            
+                    
             retailer.set_retailer_id(ids)
             retailer_dict[ids] = retailer
             db_shelve['Retailers'] = retailer_dict
@@ -4267,15 +4282,14 @@ def create_retailer():
             db_shelve_uniqueID.close()
             return redirect(url_for('landing_page'))
         else:
-            flash("An Error Occurred trying to submit Form", category='danger')
+            if register_retailer_form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in register_retailer_form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number,
+                                        error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
             return redirect(url_for('landing_page'))
-    if register_retailer_form.errors != {}:  # If there are not errors from the validations
-        errors = []
-        for err_msg in register_retailer_form.errors.values():
-            errors.append(err_msg)
-        err_message = '<br/>'.join([f'({number}){error[0]}' for number,
-                                   error in enumerate(errors, start=1)])
-        flash(f'{err_message}', category='danger')
 
     if request.method == 'GET':
         return render_template('registerRetail.html', form=register_retailer_form)
@@ -4319,8 +4333,7 @@ def update_retailer(id):
 
     else:
         retailer_dict = {}
-        retailer_db = shelve.open(
-            'website/databases/retailer/retailer.db', 'c')
+        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
         retailer_dict = retailer_db['Retailers']
         retailer_db.close()
         retailer = retailer_dict.get(id)
@@ -4414,8 +4427,7 @@ def register_retail_account(id):
                 [f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
             flash(f'{err_message}', category='danger')
 
-        db_tempemail = shelve.open(
-            'website/databases/tempemail/tempemail.db', 'c')
+        db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
         try:
             db_tempemail['email'] = user_email
             db_tempemail.close()
@@ -4429,8 +4441,7 @@ def register_retail_account(id):
         msg.body = f"Dear valued retailer, \n\n We have received a request to create a retail account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
         mail.send(msg)
 
-        flash(
-            f"Success! Account {user_to_create.username} created!", category='success')
+        flash(f"Success! Account {user_to_create.username} created!", category='success')
 
         return redirect(url_for('landing_page'))
 
@@ -4697,7 +4708,7 @@ def add_location_pic(id):
                     retailer_db.close()    
                     
                     saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
-                    flash("Location pic successfully!", category='success')
+                    flash("Location pic uploaded successfully!", category='success')
                     return redirect(url_for("location", id=retailer.get_retailer_id()))
             else:
                 if form.errors != {}:  # If there are not errors from the validations
@@ -4762,11 +4773,14 @@ def locate_us():
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
     retailer_dict = retailer_db['Retailers']
     retailer_list = []
+    image_list=[]
     for key in retailer_dict:
         retailer = retailer_dict.get(key)
         retailer_list.append(retailer)
+        image = retailer.get_location_image()
+        image_list.append(image)
     retailer_db.close()
-    return render_template('locate_us.html', retailer_list=retailer_list)
+    return render_template('locate_us.html', retailer_list=retailer_list, image_list=image_list)
 
 
 @app.route('/404')

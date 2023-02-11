@@ -98,9 +98,7 @@ class User(db.Model, UserMixin):
 
 class Retail:
     count_id = 0
-
-    # , map_url):
-    def __init__(self, id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered):
+    def __init__(self, id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered, map_url, img):
         Retail.count_id += 1
         self.__id = id
         self.__count_id = Retail.count_id
@@ -112,7 +110,8 @@ class Retail:
         self.__office_no = office_no
         self.__email_address = email_address
         self.__date_registered = date_registered
-        #self.__map_url = map_url
+        self.__map_url = map_url
+        self.__img = img
 
     def get_retailer_id(self):
         return self.__id

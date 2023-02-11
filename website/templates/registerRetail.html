@@ -22,7 +22,7 @@
                             <div class="text-center">
                                 <h6 class="text-gray-900 mb-4">First, enter your business information before registering with us for an official retail account.</h6>
                             </div>
-                            <form class="user" method="POST">
+                            <form class="user" method="POST" enctype="multipart/form-data">
                                 {{ form.hidden_tag() }}
                                 <!--This flask built in tag protects our site
                                 from Cross Site Request Forgery (CSRF) Attack -->
@@ -60,6 +60,15 @@
                                     {{ form.email_address.label() }}
                                     {{ form.email_address(class='form-control form-control-user', placeholder='Email address') }}
                                 </div>
+                                <div class="form-group row">
+                                    {{ form.location.label() }}
+                                    {{ form.location(class='form-control form-control-user', placeholder='Email address') }}
+                                </div>
+                                <div class="form-group row" style="border-radius: 100%;">
+                                    {{ form.location_pic.label() }}
+                                    {{ form.location_pic(class='form-control form-control-user', placeholder='Location picture') }}
+                                </div>
+                                
                                 {{ form.submit(class='btn btn-primary btn-user btn-block') }}
                                 <a href="javascript:history.back()" class="btn btn-primary btn-user btn-block">Back</a>
                             </form>

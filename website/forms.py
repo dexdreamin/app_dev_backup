@@ -405,7 +405,8 @@ class RegisterRetailerForm(FlaskForm):
                             Length(min=8, max=8), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[
                                Email(), DataRequired()])
-    #location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
+    location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
+    location_pic = FileField(label="Location picture: ")
     submit = SubmitField(label="Submit")
 
 

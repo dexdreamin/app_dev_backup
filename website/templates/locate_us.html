@@ -9,8 +9,22 @@
 
 <h1>Locate our official retail shops!</h1>
 {% for retailer in retailer_list %}
+    {% if retailer.get_location_image() in image_list %}
+        <div class="card" style="width: 50%;">
+            <img class="card-img-top" src="{{ url_for('static', filename='images/profile_pic/'+retailer.get_location_image() )}}" alt="Card image cap" height="200px" width="50px">
+            <div class="card-body">
+            <h5 class="card-title">Shop name: {{ retailer.get_location() }}</h5>
+            <p class="card-text">Shop unit number: {{ retailer.get_unit_number() }}</p>
+            <p class="card-text">Shop address: {{ retailer.get_address()}}</p>
+            <p class="card-text">Postal code: {{ retailer.get_postal_code() }}</p>
+            <p class="card-text">Company email address: {{ retailer.get_email_address() }}</p>
+            <p class="card-text">Office hotline: {{ retailer.get_office_no() }}</p>
+            <a class="btn btn-primary" href="{{ retailer.get_map_url() }}" target="_blank">Go to location</a>
+            </div>
+        </div>
+    {% else %}
     <div class="card" style="width: 50%;">
-        <img class="card-img-top" src="{{ url_for('static', filename='images/profile_pic/'+retailer.get_location_image() )}}" alt="Card image cap" height="200px" width="50px">
+        <img class="card-img-top" src="{{ url_for('static', filename='images/no_image.jpg' )}}" alt="Card image cap" height="200px" width="50px">
         <div class="card-body">
         <h5 class="card-title">Shop name: {{ retailer.get_location() }}</h5>
         <p class="card-text">Shop unit number: {{ retailer.get_unit_number() }}</p>
@@ -21,6 +35,8 @@
         <a class="btn btn-primary" href="{{ retailer.get_map_url() }}" target="_blank">Go to location</a>
         </div>
     </div>
+    {% endif %}
+
     <br>
 {% endfor %}
 {% endblock %}
