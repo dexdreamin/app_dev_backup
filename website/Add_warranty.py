@@ -2,7 +2,8 @@ from website.models import warranty
 import shelve
 
 db_shelve = shelve.open('databases/warranty/warranty.db', 'c')
-db_shelve_uniqueID = shelve.open('databases/warranty/warranty_uniqueID.db', 'c')
+db_shelve_uniqueID = shelve.open(
+    'databases/warranty/warranty_uniqueID.db', 'c')
 warranty = {}
 ids = 0
 try:
@@ -23,7 +24,8 @@ except Exception as e:
 
 else:
     while True:
-        choice = input("Create warranty(1), Check warranty database(2), Delete warranty(3), Save Changes & Exit(4): ")
+        choice = input(
+            "Create warranty(1), Check warranty database(2), Delete warranty(3), Save Changes & Exit(4): ")
         if choice == '1':
             ids += 1
             name = input("Enter warranty Name: ")
@@ -33,7 +35,6 @@ else:
             print("warranty database")
             for i in warranty:
                 print(f"{warranty[i]}")
-
 
         elif choice == '2':
             for i in warranty:
@@ -49,11 +50,9 @@ else:
             if choice in warranty:
                 del warranty[choice]
 
-
         elif choice == '4':
             db_shelve['warrantyinfo'] = warranty
             db_shelve.close()
             db_shelve_uniqueID['Id_info'] = ids
             db_shelve_uniqueID.close()
             exit()
-

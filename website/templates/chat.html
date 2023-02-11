@@ -1,16 +1,11 @@
-{% if current_user.admin == 1 %}
-{% extends "base.html" %}
-{% else %}
-{% extends "based.html" %}
-{% endif %}
-{% block title %}Chat{% endblock %}
-
-{% block content %}
+{% if current_user.admin == 1 %} {% extends "base.html" %} {% else %} {% extends
+"based.html" %} {% endif %} {% block title %}Chat{% endblock %} {% block content
+%}
 <iframe src="http://localhost:3000/"></iframe>
 <style>
-  iframe{
-    width:100vw;
-    height:100vh;
+  iframe {
+    width: 100vw;
+    height: 100vh;
   }
 </style>
 {% endblock %}

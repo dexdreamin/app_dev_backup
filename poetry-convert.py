@@ -4,10 +4,10 @@ Convert a requirements.txt file to a Poetry project.
 
 Just place in the root of your working directory and run!
 """
+import os
+import re
 sourceFile = "./requirements.txt"
 
-import re
-import os
 
 if not os.path.exists(sourceFile):
     # Install Pigar and run it to generate your initial requirements
@@ -27,7 +27,8 @@ with open(sourceFile) as fh:
     requirements = fh.read()
 
 noComments = re.sub("^#.*$", "", requirements, 0, re.IGNORECASE | re.MULTILINE)
-bareRequirements = re.sub("\n+", "\n", noComments, 0, re.IGNORECASE | re.MULTILINE).strip()
+bareRequirements = re.sub("\n+", "\n", noComments, 0,
+                          re.IGNORECASE | re.MULTILINE).strip()
 
 pipPoetryMap = {
     ">": "^",
@@ -36,7 +37,8 @@ pipPoetryMap = {
 
 reqList = list()
 for line in bareRequirements.splitlines():
-    package, match, version = re.sub(r"^(.*?)\s*([~>=<])=\s*v?([0-9\.\*]+)", r"\1,\2,\3", line, 0, re.IGNORECASE | re.MULTILINE).split(",")
+    package, match, version = re.sub(
+        r"^(.*?)\s*([~>=<])=\s*v?([0-9\.\*]+)", r"\1,\2,\3", line, 0, re.IGNORECASE | re.MULTILINE).split(",")
     try:
         poetryMatch = pipPoetryMap[match]
     except KeyError:
