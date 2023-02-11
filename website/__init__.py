@@ -1,4 +1,3 @@
-from website import routes
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -6,7 +5,6 @@ from flask_bcrypt import Bcrypt
 import os
 from dotenv import load_dotenv
 from os import path
-
 
 def create_database(app):
     if not path.exists('website/' + DB_NAME):
@@ -51,3 +49,4 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'index_page'
 login_manager.login_message_category = 'info'
 # makes the message flashed blue when user is not authorised/logged in.
+from website import routes
