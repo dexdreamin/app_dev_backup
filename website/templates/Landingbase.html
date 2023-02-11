@@ -83,6 +83,23 @@
       })();
       
     </script>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+                    <!--    with_categories = true means it grabs the categories as well for messages-->
+                    {% if messages %}
+                        {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">
+                                    <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    {% autoescape false %}
+                                    {{ message }}
+                                    {% endautoescape %}
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+            
+                                {% endwith %}
     <!-- Vendor Styles-->
     <link rel="stylesheet" media="screen" href="https://finder.createx.studio/vendor/simplebar/dist/simplebar.min.css">
     <!-- Main Theme Styles + Bootstrap-->
