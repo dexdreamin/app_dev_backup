@@ -10,7 +10,8 @@ from os import path
 def create_database(app):
     if not path.exists('website/' + DB_NAME):
         # if database.db does not exist in this path it creates a database
-        db.create_all(app=app)
+        with app.app_context():
+            db.create_all()
         print('Created Database! ')
 
 load_dotenv()

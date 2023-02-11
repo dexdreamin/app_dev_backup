@@ -6,14 +6,22 @@
 {% block title %}Retailer Location{% endblock %}
 
 {% block content %}
+<div class="container-fluid" style="overflow-x: scroll;">
+ 
+  <form method="POST" style="margin-top: 60px;" >
 
+      {{ form.hidden_tag() }}
+      <h1>Add location</h1>
+      <div>
+        {{ form.location.label() }}
+        {{ form.location(class='form-control form-control-user') }}
+      </div>
 
+    <br>
+    {{ form.submit(class='btn btn-primary btn-user btn-block') }}
 
-<div class="container mt-4 col-md-5">
-  <h1>All locations of retailers</h1>
-
+  </form>
 </div>
-
 
 <style>
 

@@ -140,10 +140,11 @@ class Retail:
     def get_date_registered(self):
         return self.__date_registered
     
-    '''
     def get_map_url(self):
         return self.__map_url
-    '''
+    
+    def get_location_image(self):
+        return self.__img
 
     def set_retailer_id(self, id):
         self.__id = id
@@ -171,10 +172,12 @@ class Retail:
 
     def set_date_registered(self, date):
         self.__date_registered = date
-    '''
+
     def set_map_url(self, map_url):
         self.__map_url = map_url
-    '''
+
+    def set_location_img(self, img):
+        self.__img = img
 
 class Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)

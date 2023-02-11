@@ -379,6 +379,18 @@ class Add_Location(FlaskForm):
     location = StringField(label="Google Maps URL: ", validators=[DataRequired()])
     submit = SubmitField(label="Add Location")
 
+class Update_Location(FlaskForm):
+    location = StringField(label="Google Maps URL: ", validators=[DataRequired()])
+    submit = SubmitField(label="Update Location")
+
+class Add_Location_Pic(FlaskForm):
+    location_pic = FileField(label="Location picture: ", validators=[DataRequired()])
+    submit = SubmitField(label="Upload image")
+
+class Update_Location_Pic(FlaskForm):
+    location_pic = FileField(label="Location picture: ", validators=[DataRequired()])
+    submit = SubmitField(label="Upload image")
+
 class Update_Delivery_Status(FlaskForm):
     delivery_status = SelectField('Delivery Status', choices=[('Packing', 'Packing'), ('Delivering', 'Delivering'), ('Received', 'Received')])
     submit = SubmitField(label="Update status")
