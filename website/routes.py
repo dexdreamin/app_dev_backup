@@ -4864,39 +4864,39 @@ def index_page():
 def blog():
     db = shelve.open('blog.db')
     blogs = db.get('blogs', [])
-    count = db.get('count', 0)
+    like = db.get('like', 0)
     if request.method == 'POST':
         if request.form.get('blog'):
             blogs.append({
                 'text': request.form['blog'],
-                'comments': []
+                'comments': [],
+                'like': []
             })
         elif request.form.get('comment'):
             blog_id = int(request.form['blog_id'])
             blogs[blog_id - 1]['comments'].append(request.form['comment'])
         elif request.form.get('like'):
             blog_id = int(request.form['blog_id'])
-            
             blogs[blog_id - 1]['likes'].append(request.form['like'])
         db['blogs'] = blogs
     db.close()
-    return render_template('blog.html', blogs=blogs, count=count)
+    return render_template('blog.html', blogs=blogs, like=like)
 
 
 @app.route('/liking', methods=['POST'])
 def like():
     db = shelve.open('blog.db')
-    count = db.get('count', 0)
-    count += 1
-    db['count'] = count
+    like = db.get('like', 0)
+    like += 1
+    db['like'] = like
     db.close()
     return redirect('/blog')
 
 @app.route('/dislike', methods=['POST'])
 def dislike():
     db = shelve.open('blog.db')
-    count = db.get('count', 0)
-    count -= 1
-    db['count'] = count
+    like = db.get('like', 0)
+    like -= 1
+    db['like'] = like
     db.close()
     return redirect('/blog')

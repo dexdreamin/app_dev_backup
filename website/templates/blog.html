@@ -46,42 +46,35 @@
             <li>{{ comment }}</li>
           {% endfor %}
         </ul>
+        
       {% endif %}
       <form action="/blog" method="post">
         <input type="hidden" name="blog_id" value="{{ loop.index }}">
         <textarea name="comment"></textarea><br><br>
         <input type="submit" value="Comment">
       </form>
-      <form action="/like" method="post">
-        <input type="hidden" name="blog_id" value="{{ loop.index }}">
-        <button type="submit">
-          <i class="fa fa-thumbs-up"></i> Like
-        </button>
-        <span class="like-count">{{ blog.like_count }}</span>
-      </form>
+      
     {% endfor %}
+    
       {% else %}
         <h2 class="text-center">
       <h2>No blogs to display</h2>
     {% endif %}
 
-    <div class="container">
-        <h1>Like/Dislike</h1>
-        <hr>
-        <p>Likes: {{ count }}</p>
+        
         <form name="comment" action="/liking" method="post">
             <button class="btn btn-success btn-sm">
                 <i class="fas fa-thumbs-up"></i>
                 Like
             </button>
         </form>
+        <p>Likes: {{ like }}</p>
         <form  name="comment" action="/dislike" method="post">
             <button class="btn btn-danger btn-sm">
                 <i class="fas fa-thumbs-down"></i>
                 Dislike
             </button>
         </form>
-    </div>
   </body>
   <script>
     $(document).ready(function() {
