@@ -89,6 +89,17 @@
                   </form>
                   {% endif %}
             </td>
+            <td>
+              {% if retailer.get_location() not in location_list %}
+                <form action="{{url_for('add_to_location', id=retailer.get_retailer_id() )}}" method="POST">
+                  <input type="submit" value="Add to location database" class="btn btn-primary button-2">
+                </form>
+              {% else %}
+                <form action="{{url_for('remove_location', id=retailer.get_retailer_id() )}}" method="POST">
+                  <input type="submit" value="Remove from location database" class="btn btn-danger button-2">
+                </form>
+              {% endif %}
+            </td>
             
             
           </tr>
