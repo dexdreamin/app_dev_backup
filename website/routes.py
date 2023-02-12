@@ -4995,7 +4995,7 @@ def index_page():
 
 @app.route('/blog', methods=['GET', 'POST'])
 def blog():
-    db = shelve.open('blog.db')
+    db = shelve.open('website/databases/retailer/blog.db')
     blogs = db.get('blogs', [])
     like = db.get('like', 0)
     if request.method == 'POST':
@@ -5019,7 +5019,7 @@ def blog():
 
 @app.route('/liking', methods=['POST'])
 def like():
-    db = shelve.open('blog.db')
+    db = shelve.open('website/databases/retailer/blog.db')
     like = db.get('like', 0)
     like += 1
     db['like'] = like
@@ -5028,7 +5028,7 @@ def like():
 
 @app.route('/dislike', methods=['POST'])
 def dislike():
-    db = shelve.open('blog.db')
+    db = shelve.open('website/databases/retailer/blog.db')
     like = db.get('like', 0)
     like -= 1
     db['like'] = like
@@ -5037,7 +5037,7 @@ def dislike():
 
 @app.route("/search", methods=["POST"])
 def search():
-    db = shelve.open('blog.db')
+    db = shelve.open('website/databases/retailer/blog.db')
     blogs = db.get('blogs', [])
     search_text = request.form["search_query"]
     search_results = []
