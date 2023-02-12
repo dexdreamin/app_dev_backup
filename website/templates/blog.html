@@ -17,33 +17,35 @@
         border-radius: 10px;
         margin-top: 20px;
       }
-      .like-section {
-        display: flex;
-        align-items: center;
+      
+      .fixed{
+        position:fixed;
+        top:80%;
+        height:300px;
+        width:100vw;
+        background:white;
+        display:flex;
+        flex-flow: no-wrap
       }
-      .like-count {
-        margin-left: 10px;
-        font-weight: bold;
+      li{
+        color:white;
+        background:grey;
+        
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1 class="text-center">Blog System</h1>
-      <form action="/blog" method="post">
-        <div class="form-group">
-          <textarea name="blog" class="form-control"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Post</button>
-      </form>
+      <h1 class="text-center">Anonymous suggestion</h1>
+      
       {% if blogs %}
       {% for blog in blogs %}
-      <h2>{{ blog.text }}</h2>
+      <h3>{{ blog.text }}</h3>
       {% if blog.comments %}
-        <h3>Comments</h3>
+        <h5>Comments</h5>
         <ul>
           {% for comment in blog.comments %}
-            <li>{{ comment }}</li>
+            <li>{{ comment }}</li><br>
           {% endfor %}
         </ul>
         
@@ -60,21 +62,28 @@
         <h2 class="text-center">
       <h2>No blogs to display</h2>
     {% endif %}
-
-        
+    <div class="fixed">
+        <form   action="/blog" method="post">
+            <button type="submit" class="btn btn-primary">Post</button>
+            <div>
+              <textarea name="blog" class="form-control"></textarea>
+            </div>
+            
+          </form>
         <form name="comment" action="/liking" method="post">
-            <button class="btn btn-success btn-sm">
+            <button class="btn btn-success">
                 <i class="fas fa-thumbs-up"></i>
                 Like
             </button>
         </form>
         <p>Likes: {{ like }}</p>
         <form  name="comment" action="/dislike" method="post">
-            <button class="btn btn-danger btn-sm">
+            <button class="btn btn-danger">
                 <i class="fas fa-thumbs-down"></i>
                 Dislike
             </button>
         </form>
+        
   </body>
   <script>
     $(document).ready(function() {

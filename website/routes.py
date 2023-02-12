@@ -4878,6 +4878,7 @@ def blog():
         elif request.form.get('like'):
             blog_id = int(request.form['blog_id'])
             blogs[blog_id - 1]['likes'].append(request.form['like'])
+            return redirect()
         db['blogs'] = blogs
     db.close()
     return render_template('blog.html', blogs=blogs, like=like)
