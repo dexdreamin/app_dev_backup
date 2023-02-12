@@ -5034,3 +5034,24 @@ def dislike():
     db['like'] = like
     db.close()
     return redirect('/blog')
+
+@app.route("/search", methods=["POST"])
+def search():
+    db = shelve.open('blog.db')
+    blogs = db.get('blogs', [])
+    search_text = request.form["search_query"]
+    search_results = []
+
+    # search through posts
+    for blog in blogs:
+        if search_text in blog["text"]:
+            search_results.append(blog)
+
+    # search through comments
+    for blog in blogs:
+        for comment in blog["comments"]:
+            if search_text in comment:
+                search_results.append({"blog": blog, "comment": comment})
+
+    return render_template("blog.html", search_results=search_results, search_text=search_text)
+

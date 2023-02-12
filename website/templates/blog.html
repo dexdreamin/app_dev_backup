@@ -93,12 +93,35 @@
           .post{
             width:270%;
           }
+
+          input:hover {
+            background-color: #f2f2f2;
+            color: black;
+            cursor: pointer;
+        }
+        input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
     </style>
-  </head>
-  <body>
-    <h1 class="text-center title">Anonymous suggestion</h1>
-    <div class="container">
-      
+</head>
+<body>
+  <h1 class="text-center title"><br>Anonymous suggestion<br><br></h1>
+  <div class="container">
+    <form action="/search" method="post" class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search Posts or Comments" aria-label="Search" name="search_query">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    {% if search_results %}
+    {% for result in search_results %}
+      <div class="search-result">
+        <h3>{{ result.comment }}</h3>
+        <h1>{{ result.text }}</h1>
+        <p>{{ result.content }}</p>
+      </div>
+    {% endfor %}
+  {% else %}
+    <h2>No results found</h2>
+  {% endif %}
       
       {% if blogs %}
       {% for blog in blogs %}
@@ -129,7 +152,7 @@
     <div class="fixed">
         <br><br><br>
         <form   action="/blog" method="post">
-            <button type="submit" class="btn btn-primary">Post</button>
+            <button type="submit" class="btn btn-primary">Post/ Back</button>
             <div>
               <textarea class="post" name="blog" class="form-control"></textarea>
               <br><br>
