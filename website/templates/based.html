@@ -1153,7 +1153,7 @@
   <header class="header header-absolute"> 
 
     <!-- Top Bar End-->
-    <nav class="navbar navbar-expand-lg border-0 shadow-0 px-lg-5 was-navbar-light navbar-light was-transparent bg-white"><a class="navbar-brand" href="{{ url_for('home_page') }}"><img src="../static/img/Swiss_Logo.png" alt="" height="30px"></a>
+    <nav class="navbar navbar-expand-lg border-0 shadow-0 px-lg-5 was-navbar-light navbar-light was-transparent bg-white"><a class="navbar-brand" href="{{ url_for('retail_homepage') }}"><img src="../static/img/Swiss_Logo.png" alt="" height="30px"></a>
       <ul class="list-inline mb-0 d-block d-lg-none">
         <li class="list-inline-item me-3"><a class="text-dark text-primary-hover" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
             <svg class="svg-icon navbar-icon">
@@ -1265,6 +1265,7 @@
                     <li class="megamenu-list-item"><a class="megamenu-list-link" href="{{ url_for('ticket_page') }}">Ticket    </a></li>
                     <li class="megamenu-list-item"><a class="megamenu-list-link" href="{{ url_for('Feedback_Page') }}">Feedback    </a></li>
                     <li class="megamenu-list-item"><a class="megamenu-list-link" href="{{ url_for('dashboard_page') }}">Dashboard    </a></li>
+                    <li class="megamenu-list-item"><a class="megamenu-list-link" href="{{ url_for('locate_us') }}">Locate our shops </a></li>
                   </ul>
                 </div>
               </div>
@@ -1280,16 +1281,21 @@
               <a class="dropdown-item" href="{{ url_for('Events_Page') }}">Events</a>
               <a class="dropdown-item" href="{{ url_for('Feedbacks') }}">User Feedbacks </a>
               <a class="dropdown-item" href="{{ url_for('Inventory_Management') }}">Inventory</a>
-              <div class="dropdown-divider"></div><a class="dropdown-item" href="{{ url_for('wish_list') }}">My wishlist </a><a class="dropdown-item" href="{{ url_for('location_edit') }}">Edit Location </a>
+              <div class="dropdown-divider"></div><a class="dropdown-item" style="display:none;" href="{{ url_for('wish_list') }}">My wishlist </a>
+              <a class="dropdown-item" href="{{ url_for('retail_information', id=current_user.retailer_id) }}">Your profile info</a>
+              <a class="dropdown-item" href="{{ url_for('update_location_pic', id=current_user.retailer_id) }}">Update location picture</a>
+              <a class="dropdown-item" href="{{ url_for('location_edit', id=current_user.retailer_id) }}">Edit Location </a>
+              <a class="dropdown-item" href="{{ url_for('location', id=current_user.retailer_id) }}">Your Location</a>
             </div>
           </li>
-        </ul>
+        
         {% endif %}
+      </ul>
         <form class="d-lg-flex ms-auto me-lg-7 me-xl-6 my-4 my-lg-0" action="{{ url_for('market_page') }}" method="GET"
                         class="d-none d-sm-inline-block form-inline mx-auto ml-md-3 my-2 my-md-0 mw-200 navbar-search">
                         <div class="input-group">
                             <input name="search" type="text" class="form-control bg-light border-1 large" placeholder="Search for something in market"
-                                aria-label="Search" aria-describedby="basic-addon2">
+                                aria-label="Search" aria-describedby="basic-addon2" style="width: 300px;">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
@@ -1614,10 +1620,10 @@ aria-labelledby="alertsDropdown">
                   <h6 class="text-dark letter-spacing-1 mb-4 d-none d-lg-block">Useful links</h6>
                   <ul class="list-unstyled text-sm pt-2 pt-lg-0">
                     <li class="mb-2"> <a href="{{ url_for('deals_page') }}" class="text-muted text-dark-hover link-animated" >Your Account</a></li>
-                    <li class="mb-2"> <a href="{{ url_for('location') }}"class="text-muted text-dark-hover link-animated" >Location</a></li>
                     <li class="mb-2"> <a href="{{ url_for('deposit') }}"class="text-muted text-dark-hover link-animated" >Deposit</a></li>
                     <li class="mb-2"> <a href="{{ url_for('transfer_funds_page') }}"class="text-muted text-dark-hover link-animated" >Transfer</a></li>
                     <li class="mb-2"> <a href="{{ url_for('Place_Page') }}"class="text-muted text-dark-hover link-animated" >Benefits</a></li>
+                    <li class="mb-2"> <a href="{{ url_for('locate_us') }}"class="text-muted text-dark-hover link-animated" >Locate our shops</a></li>
                   </ul>
                 </div>
               </div>

@@ -98,9 +98,7 @@ class User(db.Model, UserMixin):
 
 class Retail:
     count_id = 0
-
-    # , map_url):
-    def __init__(self, id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered):
+    def __init__(self, id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered, map_url, img):
         Retail.count_id += 1
         self.__id = id
         self.__count_id = Retail.count_id
@@ -112,7 +110,8 @@ class Retail:
         self.__office_no = office_no
         self.__email_address = email_address
         self.__date_registered = date_registered
-        #self.__map_url = map_url
+        self.__map_url = map_url
+        self.__img = img
 
     def get_retailer_id(self):
         return self.__id
@@ -143,11 +142,12 @@ class Retail:
 
     def get_date_registered(self):
         return self.__date_registered
-
-    '''
+    
     def get_map_url(self):
         return self.__map_url
-    '''
+    
+    def get_location_image(self):
+        return self.__img
 
     def set_retailer_id(self, id):
         self.__id = id
@@ -175,10 +175,12 @@ class Retail:
 
     def set_date_registered(self, date):
         self.__date_registered = date
-    '''
+
     def set_map_url(self, map_url):
         self.__map_url = map_url
-    '''
+
+    def set_location_img(self, img):
+        self.__img = img
 
 
 class Img(db.Model):

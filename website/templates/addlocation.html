@@ -1,9 +1,26 @@
-{% if current_user.admin == 1 %} {% extends "base.html" %} {% else %} {% extends
-"based.html" %} {% endif %} {% block title %}Retailer Location{% endblock %} {%
-block content %}
+{% if current_user.admin == 1 %}
+{% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+{% block title %}Retailer Location{% endblock %}
 
-<div class="container mt-4 col-md-5">
-  <h1>All locations of retailers</h1>
+{% block content %}
+<div class="container-fluid" style="overflow-x: scroll;">
+ 
+  <form method="POST" style="margin-top: 60px;" >
+
+      {{ form.hidden_tag() }}
+      <h1>Add location</h1>
+      <div>
+        {{ form.location.label() }}
+        {{ form.location(class='form-control form-control-user') }}
+      </div>
+
+    <br>
+    {{ form.submit(class='btn btn-primary btn-user btn-block') }}
+
+  </form>
 </div>
 
 <style>

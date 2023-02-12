@@ -4234,8 +4234,7 @@ def retrieve_retailers():
 def create_retailer():
     register_retailer_form = RegisterRetailerForm()
     db_shelve = shelve.open('website/databases/retailer/retailer.db', 'c')
-    db_shelve_uniqueID = shelve.open(
-        'website/databases/retailer/retailer_id_db', 'c')
+    db_shelve_uniqueID = shelve.open('website/databases/retailer/retailer_id_db', 'c')
     retailer_dict = {}
     ids = 0
     try:
@@ -4253,11 +4252,27 @@ def create_retailer():
     if request.method == 'POST':
         if register_retailer_form.validate_on_submit():
             current_time = datetime.now()
+            if request.files['location_pic']:
+                    location_pic = request.files['location_pic']
+                    retailer = retailer_dict.get(id)
+                    # Grab Image Name
+                    pic_filename = secure_filename(location_pic.filename)
+                    # Set UUID
+                    pic_name = str(uuid1()) + "_" + pic_filename
+                    # Save That Image
+                    saver = request.files['location_pic']
+
+                    #current_id = retailer.get_retailer_id()
+
+                    # Change it to a string to save to db
+                    saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
             retailer = Retail(id, register_retailer_form.company_id.data, register_retailer_form.shop.data, register_retailer_form.postal_code.data,
                               register_retailer_form.unit_number.data, register_retailer_form.address.data,
                               register_retailer_form.office_no.data, register_retailer_form.email_address.data,
-                              current_time.year)
+                              current_time.year, register_retailer_form.location.data, pic_name)
             ids += 1
+            
+                    
             retailer.set_retailer_id(ids)
             retailer_dict[ids] = retailer
             db_shelve['Retailers'] = retailer_dict
@@ -4267,49 +4282,58 @@ def create_retailer():
             db_shelve_uniqueID.close()
             return redirect(url_for('landing_page'))
         else:
-            flash("An Error Occurred trying to submit Form", category='danger')
+            if register_retailer_form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in register_retailer_form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number,
+                                        error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
             return redirect(url_for('landing_page'))
-    if register_retailer_form.errors != {}:  # If there are not errors from the validations
-        errors = []
-        for err_msg in register_retailer_form.errors.values():
-            errors.append(err_msg)
-        err_message = '<br/>'.join([f'({number}){error[0]}' for number,
-                                   error in enumerate(errors, start=1)])
-        flash(f'{err_message}', category='danger')
 
     if request.method == 'GET':
         return render_template('registerRetail.html', form=register_retailer_form)
 
 
-@app.route('/retailersedit/<int:id>', methods=['POST'])
+@app.route('/retailersedit/<int:id>', methods=['GET','POST'])
 @login_required
 def update_retailer(id):
     form = UpdateRetailerForm()
 
-    if request.method == "POST" and form.validate_on_submit():
+    if request.method == "POST": 
+        if form.validate_on_submit():
+            retailer_dict = {}
+            retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
+            retailer_dict = retailer_db["Retailers"]
+            retailer = retailer_dict.get(id)
+            print("retailer: ", retailer)
+            retailer.set_company_id(form.company_id.data)
+            retailer.set_location(form.shop.data)
+            retailer.set_email_address(form.email_address.data)
+            retailer.set_postal_code(form.postal_code.data)
+            retailer.set_office_no(form.office_no.data)
+            retailer.set_unit_number(form.unit_number.data)
+            retailer.set_address(form.address.data)
+            retailer.set_map_url(form.location.data)
 
-        retailer_dict = {}
-        retailer_db = shelve.open(
-            'website/databases/retailer/retailer.db', 'c')
-        retailer_dict = retailer_db["Retailers"]
-        retailer = retailer_dict.get(id)
-        print("retailer: ", retailer)
-        retailer.set_company_id(form.company_id.data)
-        retailer.set_location(form.shop.data)
-        retailer.set_email_address(form.email_address.data)
-        retailer.set_postal_code(form.postal_code.data)
-        retailer.set_office_no(form.office_no.data)
-        retailer.set_unit_number(form.unit_number.data)
-        retailer.set_address(form.address.data)
+            retailer_db['Retailers'] = retailer_dict
+            retailer_db.close()
+            flash("Retailer information updated successfully!", category="success")
+            if current_user.id == 1:
+                return redirect(url_for('retail_management', id=current_user.retailer_id))
+            else:
+                return redirect(url_for('retail_information', id=current_user.retailer_id))
+        else:
+            if form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
 
-        retailer_db['Retailers'] = retailer_dict
-        retailer_db.close()
-
-        return redirect(url_for('retrieve_retailers'))
     else:
         retailer_dict = {}
-        retailer_db = shelve.open(
-            'website/databases/retailer/retailer.db', 'c')
+        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
         retailer_dict = retailer_db['Retailers']
         retailer_db.close()
         retailer = retailer_dict.get(id)
@@ -4321,15 +4345,9 @@ def update_retailer(id):
         form.address.data = retailer.get_address()
         form.email_address.data = retailer.get_email_address()
         form.office_no.data = retailer.get_office_no()
+        form.location.data = retailer.get_map_url()
 
-        if form.errors != {}:  # If there are not errors from the validations
-            errors = []
-            for err_msg in form.errors.values():
-                errors.append(err_msg)
-            err_message = '<br/>'.join(
-                [f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-            flash(f'{err_message}', category='danger')
-
+    if request.method == 'GET':
         return render_template('updateRetailer.html', form=form)
 
 
@@ -4409,8 +4427,7 @@ def register_retail_account(id):
                 [f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
             flash(f'{err_message}', category='danger')
 
-        db_tempemail = shelve.open(
-            'website/databases/tempemail/tempemail.db', 'c')
+        db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
         try:
             db_tempemail['email'] = user_email
             db_tempemail.close()
@@ -4424,8 +4441,7 @@ def register_retail_account(id):
         msg.body = f"Dear valued retailer, \n\n We have received a request to create a retail account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
         mail.send(msg)
 
-        flash(
-            f"Success! Account {user_to_create.username} created!", category='success')
+        flash(f"Success! Account {user_to_create.username} created!", category='success')
 
         return redirect(url_for('landing_page'))
 
@@ -4436,7 +4452,7 @@ def register_retail_account(id):
 @login_required
 def retail_management_update(id):
     form = Update_Retailer_Account()
-    userID = User.query.filter_by(id=id).first()
+    userID = User.query.filter_by(retailer_id=id).first()
 
     if request.method == 'POST' and form.validate_on_submit():
         # NOTE THAT FORM DOES NOT VALIDATE ON SUBMIT!
@@ -4452,7 +4468,6 @@ def retail_management_update(id):
     if request.method == 'GET':
         return render_template('update_retail_management.html', form=form, user=userID)
 
-    flash(form.errors, category="danger")
     return redirect(url_for("retail_management"))
 
 
@@ -4485,7 +4500,7 @@ def retail_information(id):
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
     retailer_dict = retailer_db["Retailers"]
 
-    current_retail = retailer_dict.get(id-7)
+    current_retail = retailer_dict.get(id)
     print(current_retail)
     retailer_db.close()
 
@@ -4494,59 +4509,284 @@ def retail_information(id):
 
 @app.route('/location')
 @login_required
-def location():
+def location_database():
     retailer_dict = {}
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
-    location_db = shelve.open('website/databases/retailer/location.db', 'c')
     retailer_dict = retailer_db['Retailers']
-    location_dict = location_db['Location']
-    location_list = []
+    retailer_list = []
+
     for key in retailer_dict:
         retail = retailer_dict.get(key)
-        retail_location = retail.get_map_url()
-        location_list.append(retail_location)
+        retailer_list.append(retail)
 
-    return render_template('retailerlocation.html', location_list=location_list)
+    retailer_db.close()   
 
+    return render_template('locationdb.html', retailer_list=retailer_list)
 
-@app.route("/locationadd")
+  
+@app.route('/location/<int:id>')
 @login_required
-def location_add(id):
+def location(id):
     retailer_dict = {}
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
-    location_db = shelve.open('website/databases/retailer/location.db', 'w')
-    location_dict = {}
+    #location_db = shelve.open('website/databases/retailer/location.db', 'r')
+    retailer_dict = retailer_db['Retailers']
+    #location_dict = location_db['Location']
     location_list = []
-    try:
-        location_dict = location_db['Location']
-    except Exception as e:
-        flash(f"An unknown error, \"{e}\" has occured!", category="danger")
 
-    retailer = retailer_dict.get(id)
-    current_id = retailer.get_retailer_id()
+    retail = retailer_dict.get(id)
+    location_list.append(retail.get_location())
+    print(location_list)
+    retailer_db.close()   
 
-    print(current_id)
-    location = retailer.get_map_url()
-    current_location = Location(current_id, location)
-    #current_id += 1
-    location_dict[current_id] = current_location
-    location_db['Location'] = location_dict
-    location_db.close()
-    flash("Location URL added to database!", category="success")
-    return redirect(url_for('location'))
+    return render_template('retailerlocation.html', retail=retail, location_list=location_list)
 
-
-@app.route('/locationedit')
+@app.route("/locationadd/<int:id>", methods=['GET','POST'])
 @login_required
-def location_edit():
-    return render_template('locationeditor.html')
+def location_add(id):
+  
+    #location_db = shelve.open('website/databases/retailer/location.db', 'c')
+    #location_dict = {}
+    form = Add_Location()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            retailer_dict = {}
+            retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
+            #location_db = shelve.open('website/databases/retailer/location.db', 'c')
+            #location_dict = {}
+            try:
+                retailer_dict = retailer_db['Retailers']
+            except Exception as e:
+                flash(f"An unknown error, \"{e}\" has occured!", category="danger")
+            retailer = retailer_dict.get(id)
+            #current_id = retailer.get_retailer_id()
+
+            retailer.set_map_url(form.location.data)
+            #location = retailer.get_map_url() 
+            #current_location = Location(current_id, location)
+            #current_id += 1
+            #location_list.append(location)
+            retailer_db['Retailers'] = retailer_dict
+            retailer_db.close()    
+            flash("Location URL added to database!", category="success")
+            return redirect(url_for('retail_homepage'))
+        else:
+            retailer_dict = {}
+            retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
+            retailer_dict = retailer_db['Retailers']
+            retailer_db.close()
+            retailer = retailer_dict.get(id)
+            print("retailer: ", retailer)
+            if form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
+            flash("An Error Occurred trying to submit Form", category='danger')
+        
+   
+    return render_template('addlocation.html', form=form)
+
+    
+@app.route('/locationedit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def location_edit(id):
+    form = Update_Location()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            retailer_dict = {}
+            retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
+            #location_db = shelve.open('website/databases/retailer/location.db', 'c')
+            #location_dict = {}
+            try:
+                retailer_dict = retailer_db['Retailers']
+            except Exception as e:
+                flash(f"An unknown error, \"{e}\" has occured!", category="danger")
+            retailer = retailer_dict.get(id)
+            #current_id = retailer.get_retailer_id()
+
+            retailer.set_map_url(form.location.data)
+            #location = retailer.get_map_url() 
+            #current_location = Location(current_id, location)
+            #current_id += 1
+            #location_list.append(location)
+            retailer_db['Retailers'] = retailer_dict
+            retailer_db.close()    
+            flash("Location URL updated to database!", category="success")
+            return redirect(url_for('retail_homepage'))
+        else:
+            retailer_dict = {}
+            retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
+            retailer_dict = retailer_db['Retailers']
+            retailer_db.close()
+            retailer = retailer_dict.get(id)
+            form.location.data = retailer.get_map_url()
+            print("retailer: ", retailer)
+            if form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
+            flash("An Error Occurred trying to submit Form", category='danger')
+    return render_template('locationeditor.html', form=form)
+
+@app.route('/adminlocationedit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def admin_location_edit(id):
+    form = Update_Location()
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            retailer_dict = {}
+            retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
+            #location_db = shelve.open('website/databases/retailer/location.db', 'c')
+            #location_dict = {}
+            try:
+                retailer_dict = retailer_db['Retailers']
+            except Exception as e:
+                flash(f"An unknown error, \"{e}\" has occured!", category="danger")
+            retailer = retailer_dict.get(id)
+            #current_id = retailer.get_retailer_id()
+
+            retailer.set_map_url(form.location.data)
+            #location = retailer.get_map_url() 
+            #current_location = Location(current_id, location)
+            #current_id += 1
+            #location_list.append(location)
+            retailer_db['Retailers'] = retailer_dict
+            retailer_db.close()    
+            flash("Location URL updated to database!", category="success")
+            return redirect(url_for('location_database'))
+        else:
+            retailer_dict = {}
+            retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
+            retailer_dict = retailer_db['Retailers']
+            retailer_db.close()
+            retailer = retailer_dict.get(id)
+            form.location.data = retailer.get_map_url()
+            print("retailer: ", retailer)
+            if form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
+            flash("An Error Occurred trying to submit Form", category='danger')
+    return render_template('locationeditor.html', form=form)
+
+
+@app.route('/add_pic/<int:id>', methods=['GET', 'POST'])
+def add_location_pic(id):
+    form = Add_Location_Pic()
+    retailer_dict = {}
+    retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
+    retailer_dict = retailer_db['Retailers']
+
+
+    if request.method == 'POST':
+            if form.validate_on_submit():
+                if request.files['location_pic']:
+                    location_pic = request.files['location_pic']
+                    retailer = retailer_dict.get(id)
+                    # Grab Image Name
+                    pic_filename = secure_filename(location_pic.filename)
+                    # Set UUID
+                    pic_name = str(uuid1()) + "_" + pic_filename
+                    # Save That Image
+                    saver = request.files['location_pic']
+
+                    #current_id = retailer.get_retailer_id()
+
+                    # Change it to a string to save to db
+                    retailer.set_location_img(pic_name)
+
+                    retailer_db['Retailers'] = retailer_dict
+                    retailer_db.close()    
+                    
+                    saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
+                    flash("Location pic uploaded successfully!", category='success')
+                    return redirect(url_for("location", id=retailer.get_retailer_id()))
+            else:
+                if form.errors != {}:  # If there are not errors from the validations
+                    errors = []
+                    for err_msg in form.errors.values():
+                        errors.append(err_msg)
+                    err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                    flash(f'{err_message}', category='danger')
+                    return redirect(url_for('location_database'))
+
+    return render_template('add_location_picture.html', form=form)
+
+
+@app.route('/update_location_pic/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update_location_pic(id):
+    form = Update_Location_Pic()
+    retailer_dict = {}
+    retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
+    retailer_dict = retailer_db['Retailers']
+
+
+    if request.method == 'POST':
+            if form.validate_on_submit():
+                if request.files['location_pic']:
+                    location_pic = request.files['location_pic']
+                    retailer = retailer_dict.get(id)
+                    # Grab Image Name
+                    pic_filename = secure_filename(location_pic.filename)
+                    # Set UUID
+                    pic_name = str(uuid1()) + "_" + pic_filename
+                    # Save That Image
+                    saver = request.files['location_pic']
+
+                    #current_id = retailer.get_retailer_id()
+
+                    # Change it to a string to save to db
+                    retailer.set_location_img(pic_name)
+
+                    retailer_db['Retailers'] = retailer_dict
+                    retailer_db.close()    
+                    
+                    saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
+                    flash("Location pic successfully!", category='success')
+                    return redirect(url_for("location", id=retailer.get_retailer_id()))
+            else:
+                if form.errors != {}:  # If there are not errors from the validations
+                    errors = []
+                    for err_msg in form.errors.values():
+                        errors.append(err_msg)
+                    err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                    flash(f'{err_message}', category='danger')
+                    return redirect(url_for('location_database'))
+
+    return render_template('update_location_picture.html', form=form)
+
+
+@app.route('/locate_us')
+@login_required
+def locate_us():
+    retailer_dict = {}
+    retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
+    retailer_dict = retailer_db['Retailers']
+    retailer_list = []
+    image_list=[]
+    for key in retailer_dict:
+        retailer = retailer_dict.get(key)
+        retailer_list.append(retailer)
+        image = retailer.get_location_image()
+        image_list.append(image)
+    retailer_db.close()
+    return render_template('locate_us.html', retailer_list=retailer_list, image_list=image_list)
 
 
 @app.route('/404')
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('error404.html'), 404
-
 
 @app.route('/legal')
 def legal():

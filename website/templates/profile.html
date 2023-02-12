@@ -20,7 +20,7 @@
             <a class="list-group-item" href="{{ url_for('ticket_history') }}"> Ticket History </a>
             {% else %}
             <a class="list-group-item active" href="{{ url_for('profile_page') }}"> Account overview  </a>
-            <a class="list-group-item" href="{{ url_for('retail_information', id=current_user.id) }}">View retail information</a>
+            <a class="list-group-item" href="{{ url_for('retail_information', id=current_user.retailer_id) }}">View retail information</a>
             <a class="list-group-item" href="{{ url_for('past_orders') }}">My Orders </a>
             <a class="list-group-item" href="{{ url_for('wish_list') }}"> My wishlist </a>
             <a class="list-group-item" href="{{ url_for('appointment') }}">Bookings</a>
@@ -301,7 +301,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    {{username_form.submit(class='btn btn-primary btn-user ')}}
+                    {{password_form.submit(class='btn btn-primary btn-user ')}}
                 </div>
                 </form>
             </div>

@@ -175,7 +175,7 @@
                       <h6 class="collapse-header">Custom Utilities:</h6>
                       <a class="collapse-item" href="{{ url_for('retrieve_retailers') }}">Retailer List</a>
                       <a class="collapse-item" href="{{ url_for('retail_management') }}">Retailer <br> management</a>
-                      <a class="collapse-item" href="{{ url_for('location') }}">View your location</a>
+                      <a class="collapse-item" href="{{ url_for('location_database') }}">Retail location database</a>
                   </div>
             </div>
             </li>
@@ -216,8 +216,6 @@
                           My wishlist
                         </a>
                         <!--added this for retailer-->
-                        <a class="collapse-item" href="{{ url_for('location_edit') }}">Edit your location</a>
-                        <a class="collapse-item" href="{{ url_for('location') }}">View your location</a>
                         <a class="collapse-item" href="{{ url_for('profile_page') }}">View your profile</a>
                     </div>
                 </div>
@@ -688,9 +686,6 @@
             </p>
             <p>
               <a href="{{ url_for('deals_page') }}">Deals</a>
-            </p>
-            <p>
-              <a href="{{ url_for('location') }}">Retail Location</a>
             </p>
           {% endif %}
 

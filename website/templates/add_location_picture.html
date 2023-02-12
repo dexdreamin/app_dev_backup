@@ -1,0 +1,24 @@
+{% if current_user.admin == 1 %}
+{% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+{% block title %}Retailer Location{% endblock %}
+
+{% block content %}
+<h1>Add location picture</h1>
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="form-col">
+        <div class="col form-group">
+        {{ form.location_pic.label(class="form-label") }}
+        {{ form.location_pic(class="form-control") }}
+        </div>
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        {{ form.submit(class='btn btn-primary btn-user ')}}
+    </div>
+    </div>
+</form>
+
+{% endblock %}

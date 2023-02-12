@@ -405,7 +405,8 @@ class RegisterRetailerForm(FlaskForm):
                             Length(min=8, max=8), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[
                                Email(), DataRequired()])
-    #location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
+    location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
+    location_pic = FileField(label="Location picture: ")
     submit = SubmitField(label="Submit")
 
 
@@ -491,6 +492,17 @@ class Add_Location(FlaskForm):
                            validators=[DataRequired()])
     submit = SubmitField(label="Add Location")
 
+class Update_Location(FlaskForm):
+    location = StringField(label="Google Maps URL: ", validators=[DataRequired()])
+    submit = SubmitField(label="Update Location")
+
+class Add_Location_Pic(FlaskForm):
+    location_pic = FileField(label="Location picture: ", validators=[DataRequired()])
+    submit = SubmitField(label="Upload image")
+
+class Update_Location_Pic(FlaskForm):
+    location_pic = FileField(label="Location picture: ", validators=[DataRequired()])
+    submit = SubmitField(label="Upload image")
 
 class Update_Delivery_Status(FlaskForm):
     delivery_status = SelectField('Delivery Status', choices=[(
