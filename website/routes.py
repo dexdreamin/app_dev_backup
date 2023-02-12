@@ -324,6 +324,33 @@ def delete_profile():
     return redirect(url_for("home_page"))
 
 
+@app.route('/deleteRetailProfile/<int:id>')
+@login_required
+def delete_retail_profile(id):
+    location_dict = {}
+    location_db = shelve.open('website/databases/retailer/location.db', 'w')
+    location_dict = location_db['Location']
+    db.create_all()
+    userID = User.query.filter_by(id=current_user.id).first()
+   
+    current_id = location_dict.get(id)
+    location_dict.pop(id)
+    location_db['Location'] = location_dict
+
+    if current_id not in location_db['Location']:
+        flash("Deletion Successful!", category="success")
+    else:
+        flash("Deletion unsuccessful!", category='danger')
+
+    db.session.delete(userID)
+    db.session.commit()
+    location_db.close()
+    logout_user()
+    flash("Account Deleted Successfully", category="success")
+    return redirect(url_for("home_page"))
+
+
+
 @app.route('/sudo_deleteProfile/<int:id>')
 @login_required
 def sudo_delete_profile(id):
@@ -4204,16 +4231,22 @@ def retrieve_retailers():
     retailer_dict = {}
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
     retailer_dict = retailer_db["Retailers"]
+    location_dict = {}
+    location_db = shelve.open('website/databases/retailer/location.db', 'r')    
+    location_list = []
+    
+    location_dict = location_db["Location"]
 
-    for key in retailer_dict:
-        print(retailer_dict[key])
+    for key in location_dict:
+        location = location_dict.get(key)
+        location = location.get_location()
+        location_list.append(location)
 
     print(retailer_dict)
 
     retailer_db.close()
 
     retailers_list = []
-    #location_list = []
     retailersid_list = []
     users = User.query.all()
 
@@ -4227,7 +4260,7 @@ def retrieve_retailers():
         # location_list.append(retail_location)
         retailers_list.append(retail)
 
-    return render_template('retail_database.html', count=len(retailers_list), retailers_list=retailers_list, retailersid_list=retailersid_list, users=users)
+    return render_template('retail_database.html', count=len(retailers_list), retailers_list=retailers_list, retailersid_list=retailersid_list, users=users, location_list=location_list)
 
 
 @app.route('/retailers/create', methods=['GET', 'POST'])
@@ -4320,7 +4353,7 @@ def update_retailer(id):
             retailer_db.close()
             flash("Retailer information updated successfully!", category="success")
             if current_user.id == 1:
-                return redirect(url_for('retail_management', id=current_user.retailer_id))
+                return redirect(url_for('retrieve_retailers'))
             else:
                 return redirect(url_for('retail_information', id=current_user.retailer_id))
         else:
@@ -4347,8 +4380,8 @@ def update_retailer(id):
         form.office_no.data = retailer.get_office_no()
         form.location.data = retailer.get_map_url()
 
-    if request.method == 'GET':
-        return render_template('updateRetailer.html', form=form)
+    
+    return render_template('updateRetailer.html', form=form)
 
 
 @app.route('/retailers/delete/<int:id>', methods=['POST'])
@@ -4356,8 +4389,7 @@ def update_retailer(id):
 def retailer_delete(id):
     try:
         retailer_dict = {}
-        retailer_db = shelve.open(
-            'website/databases/retailer/retailer.db', 'w')
+        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
         retailer_dict = retailer_db['Retailers']
 
         current_id = retailer_dict.get(id)
@@ -4396,7 +4428,8 @@ def register_retail_account(id):
     retailer_dict = {}
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
     retailer_dict = retailer_db["Retailers"]
-
+    location_db = shelve.open('website/databases/retailer/location.db', 'c')
+    location_dict = {}
     retailer = retailer_dict.get(id)
     current_id = retailer.get_retailer_id()
     print(current_id)
@@ -4407,11 +4440,38 @@ def register_retail_account(id):
         if check_password_strength(password) == False:
             return redirect(url_for('register_page'))
         else:
+            retailer_id = retailer.get_retailer_id()
+            location = retailer.get_location()
+            postal_code = retailer.get_postal_code()
+            unit_number = retailer.get_unit_number()
+            email_address = retailer.get_email_address()
+            address = retailer.get_address()
+            office_no = retailer.get_office_no()
+            map_url = retailer.get_map_url()
+            img = retailer.get_location_image()
+            company_id = retailer.get_company_id()
+            date_registered = retailer.get_date_registered()
+
+            if 'Location' in location_db:
+                location_dict = location_db['Location']
+            else:
+                location_db['Location'] = location_dict
+
+            location = Location(retailer_id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered, map_url, img)
+            location_dict[id] = location
+            location_db['Location'] = location_dict
+
+            flash("Location added successfully to database!", category="success")
+           
             user_to_create = User(username=form.username.data,
                                   retailer_id=retailer.get_retailer_id(),
                                   email_address=retailer.get_email_address(),
                                   password=form.password1.data,
                                   usertype="retailers")
+            
+            location_db.close()
+            retailer_db.close()
+
             db.session.add(user_to_create)
             db.session.commit()
 
@@ -4765,10 +4825,82 @@ def update_location_pic(id):
 
     return render_template('update_location_picture.html', form=form)
 
+@app.route('/add_to_location_db/<int:id>', methods=["GET", "POST"])
+@login_required
+def add_to_location(id):
+    retailer_dict = {}
+    retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
+    location_db = shelve.open('website/databases/retailer/location.db', 'c')
+    location_dict = {}
+    retailer_dict = retailer_db['Retailers']
+    retailer = retailer_dict.get(id)
+    retailer_id = retailer.get_retailer_id()
+    location = retailer.get_location()
+    postal_code = retailer.get_postal_code()
+    unit_number = retailer.get_unit_number()
+    email_address = retailer.get_email_address()
+    address = retailer.get_address()
+    office_no = retailer.get_office_no()
+    map_url = retailer.get_map_url()
+    img = retailer.get_location_image()
+    company_id = retailer.get_company_id()
+    date_registered = retailer.get_date_registered()
+    if 'Location' in location_db:
+        location_dict = location_db['Location']
+    else:
+        location_db['Location'] = location_dict
+    location = Location(retailer_id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered, map_url, img)
+    location_dict[id] = location
+    location_db['Location'] = location_dict
+    flash("Location added successfully to database!", category="success")
+    location_db.close()
+    retailer_db.close()
+    return redirect(url_for('retrieve_retailers'))
+
+@app.route('/remove_from_location_db/<int:id>', methods=["GET", "POST"])
+@login_required
+def remove_location(id):
+    try:
+        location_dict = {}
+        location_db = shelve.open('website/databases/retailer/location.db', 'w')
+        location_dict = location_db['Location']
+
+        current_id = location_dict.get(id)
+        location_dict.pop(id)
+        location_db['Location'] = location_dict
+
+        if current_id not in location_db['Location']:
+            flash("Deletion Successful!", category="success")
+        else:
+            flash("Deletion unsuccessful!", category='danger')
+
+        location_db.close()
+
+    except IOError:
+        flash("Something went wrong with the database!", category='danger')
+
+    # except Exception as e:
+    #     flash(f"{e} went wrongly!")
+
+    return redirect(url_for('retrieve_retailers'))
+
+
 
 @app.route('/locate_us')
-@login_required
 def locate_us():
+    location_dict = {}
+    location_db = shelve.open('website/databases/retailer/location.db', 'r')
+    location_dict = location_db['Location']
+    location_list = []
+    image_list = []
+    for key in location_dict:
+        location = location_dict.get(key)
+        location_list.append(location)
+        image = location.get_location_image()
+        image_list.append(image)
+    location_db.close()
+
+    '''
     retailer_dict = {}
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
     retailer_dict = retailer_db['Retailers']
@@ -4780,7 +4912,8 @@ def locate_us():
         image = retailer.get_location_image()
         image_list.append(image)
     retailer_db.close()
-    return render_template('locate_us.html', retailer_list=retailer_list, image_list=image_list)
+    '''
+    return render_template('locate_us.html', retailer_list=location_list, image_list=image_list)
 
 
 @app.route('/404')

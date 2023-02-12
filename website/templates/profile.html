@@ -191,11 +191,19 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
+                {% if current_user.usertype == "retailers" %}
+                <div class="modal-body">Are you sure you want to delete your account? This action cannot be undone.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" href="{{ url_for('delete_retail_profile', id=current_user.retailer_id) }}">Delete Account</a>
+                </div>
+                {% else %}
                 <div class="modal-body">Are you sure you want to delete your account? This action cannot be undone.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-danger" href="{{ url_for('delete_profile') }}">Delete Account</a>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

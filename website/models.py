@@ -779,15 +779,88 @@ class Feedback(Message):
 
 
 class Location:
-    def __init__(self, location_id, location):
-        self.__location_id = location_id
+    count_id = 0
+    def __init__(self, id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered, map_url, img):
+        Location.count_id += 1
+        self.__id = id
+        self.__count_id = Location.count_id
+        self.__company_id = company_id
         self.__location = location
+        self.__postal_code = postal_code
+        self.__unit_number = unit_number
+        self.__address = address
+        self.__office_no = office_no
+        self.__email_address = email_address
+        self.__date_registered = date_registered
+        self.__map_url = map_url
+        self.__img = img
 
+    
     def get_location_id(self):
-        return self.__location_id
+        return self.__id
+
+    def get_count_id(self):
+        return self.__count_id
+
+    def get_company_id(self):
+        return self.__company_id
 
     def get_location(self):
         return self.__location
 
+    def get_postal_code(self):
+        return self.__postal_code
+
+    def get_unit_number(self):
+        return self.__unit_number
+
+    def get_email_address(self):
+        return self.__email_address
+
+    def get_address(self):
+        return self.__address
+
+    def get_office_no(self):
+        return self.__office_no
+
+    def get_date_registered(self):
+        return self.__date_registered
+    
+    def get_map_url(self):
+        return self.__map_url
+    
+    def get_location_image(self):
+        return self.__img
+
+    def set_location_id(self, id):
+        self.__id = id
+
+    def set_company_id(self, company_id):
+        self.__company_id = company_id
+
     def set_location(self, location):
         self.__location = location
+
+    def set_postal_code(self, postal_code):
+        self.__postal_code = postal_code
+
+    def set_unit_number(self, unit_number):
+        self.__unit_number = unit_number
+
+    def set_email_address(self, email_address):
+        self.__email_address = email_address
+
+    def set_address(self, address):
+        self.__address = address
+
+    def set_office_no(self, office_no):
+        self.__office_no = office_no
+
+    def set_date_registered(self, date):
+        self.__date_registered = date
+
+    def set_map_url(self, map_url):
+        self.__map_url = map_url
+
+    def set_location_img(self, img):
+        self.__img = img
