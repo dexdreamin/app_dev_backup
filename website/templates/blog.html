@@ -102,7 +102,7 @@
       
       {% if blogs %}
       {% for blog in blogs %}
-      <h3>{{ blog.text }}<br></h3>
+      <h3><br>{{ blog.text }}<br></h3>
       <br>
       {% if blog.comments %}
         <h5>Comments</h5>
@@ -115,8 +115,9 @@
       {% endif %}
       <form action="/blog" method="post">
         <input type="hidden" name="blog_id" value="{{ loop.index }}">
-        <textarea name="comment"></textarea><br><br>
+        <textarea name="comment"></textarea>
         <input type="submit" value="Comment">
+        <br>
       </form>
       
     {% endfor %}
