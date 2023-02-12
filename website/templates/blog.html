@@ -8,39 +8,102 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <!-- Custom CSS -->
     <style>
-      form {
-        margin-top: 20px;
-      }
-      .blog {
-        background-color: #f2f2f2;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 20px;
-      }
-      
-      .fixed{
-        position:fixed;
-        top:80%;
-        height:300px;
-        width:100vw;
-        background:white;
-        display:flex;
-        flex-flow: no-wrap
-      }
-      li{
-        color:white;
-        background:grey;
-        
-      }
+        body {
+            background-color: #36393F;
+            color: white;
+            font-family: Arial, sans-serif;
+          }
+    
+          h1 {
+            background-color: #2C2F33;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+          }
+    
+          .container {
+            margin-top: 20px;
+            
+          }
+    
+          .blog {
+            background-color: #7289DA;
+            width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          }
+    
+          ul {
+            list-style: none;
+            padding: 0;
+          }
+    
+          li {
+            background-color: #99AAB5;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+          }
+
+    
+          textarea {
+            background-color: #2C2F33;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            width: 90%;
+          }
+    
+          input[type="submit"] {
+            background-color: #7289DA;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+          }
+    
+          .fixed {
+            position: fixed;
+            bottom: 0px;
+            right: 0px;
+            display: flex;
+            flex-direction: row;
+            background:black;
+            width:100%;
+            justify-content:center
+          }
+    
+          .btn {
+            background-color: #7289DA;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+            margin: 10px 0;
+          }
+    
+          .btn i {
+            margin-right: 10px;
+          }
+          .post{
+            width:270%;
+          }
     </style>
   </head>
   <body>
+    <h1 class="text-center title">Anonymous suggestion</h1>
     <div class="container">
-      <h1 class="text-center">Anonymous suggestion</h1>
+      
       
       {% if blogs %}
       {% for blog in blogs %}
-      <h3>{{ blog.text }}</h3>
+      <h3>{{ blog.text }}<br></h3>
+      <br>
       {% if blog.comments %}
         <h5>Comments</h5>
         <ul>
@@ -57,16 +120,18 @@
       </form>
       
     {% endfor %}
-    
-      {% else %}
+    <br><br><br><br>
+    <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> {% else %}
         <h2 class="text-center">
       <h2>No blogs to display</h2>
     {% endif %}
     <div class="fixed">
+        <br><br><br>
         <form   action="/blog" method="post">
             <button type="submit" class="btn btn-primary">Post</button>
             <div>
-              <textarea name="blog" class="form-control"></textarea>
+              <textarea class="post" name="blog" class="form-control"></textarea>
+              <br><br>
             </div>
             
           </form>
