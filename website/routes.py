@@ -4877,9 +4877,9 @@ def blog():
     db.close()
     return render_template('blog.html', blogs=blogs)
 
-@app.route('/like', methods=['POST'])
+@app.route('/like', methods=['GET','POST'])
 def like():
-    db = shelve.open('like.db', 'c')
+    db = shelve.open('blog.db', 'c')
     blog_id = request.form['blog_id']
     likes = db.get(blog_id, 0)
     likes += 1
