@@ -272,7 +272,7 @@
             {% endif %}
           
          <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-          <div class="dropdown d-none d-lg-block order-lg-3 my-n2 me-3"><a class="d-block py-2" href="job-board-account-profile.html">
+          <div class="dropdown d-none d-lg-block order-lg-3 my-n2 me-3"><a class="d-block py-2" href="{{ url_for('profile_page') }}">
             {% if current_user.profile_pic %}
                                 <img class="rounded-circle"  width="40px"
                                     src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}">
@@ -299,10 +299,14 @@
                   <a class="dropdown-item" href="{{ url_for('appointment') }}"><i  class="fas fa-regular fa-calendar-check fa-sm fa-fw mr-2 text-gray-400"></i>Bookings</a>
                   <a class="dropdown-item" href="{{ url_for('notes') }}"><i  class="far fa-sticky-note fas fa-sm fa-fw mr-2 text-gray-400"></i>Notes</a>
                   <a class="dropdown-item" href="{{ url_for('ticket_history') }}"><i  class="fa fa-solid fa-envelope-open-text fas fa-sm fa-fw mr-2 text-gray-400"></i>Ticket History</a>
-              <div class="dropdown-divider"></div><a class="dropdown-item" href="signin-light.html"><i class="fi-logout me-2"></i>Sign Out</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                      <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                      Logout
+                  </a>
             </div>
           </div>
-
+          
           <!--search bar-->
           <form class="btn btn-primary btn-sm rounded-pill ms-2 order-lg-3" action="{{ url_for('market_page') }}" method="GET"
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -390,8 +394,9 @@
 
                     </ul>
                   </li>
+                  {% endif %}
                 </ul>
-                {% endif %}
+                
                 
               </li>
               <li class="nav-item dropdown">
