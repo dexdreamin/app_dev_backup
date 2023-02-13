@@ -178,7 +178,9 @@
     <div class="fixed">
         <br><br><br>
         <form   action="/blog" method="post">
-            <button type="submit" class="btn btn-primary">Post/ Back</button>
+            <button type="submit" class="btn btn-primary">Post</button>
+            <button class="btn btn-primary" onclick="history.back();">Back</button>
+            <a href="{{ url_for('market_page') }}" class="btn btn-primary">Shop</a><br>
             <div>
               <textarea class="post" name="blog" class="form-control"></textarea>
               <br><br>
@@ -223,4 +225,8 @@
       });
     });
   </script>
+  
+
+<script>
+
 </html>
