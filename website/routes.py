@@ -5097,3 +5097,8 @@ def search():
 
     return render_template("blog.html", search_results=search_results, search_text=search_text)
 
+@app.route("/delete_comment/<blog_id>", methods=["POST"])
+def delete_comment(blog_id):
+    with shelve.open("delete.db") as db:
+        del db[blog_id]
+    return redirect(url_for("index"))
