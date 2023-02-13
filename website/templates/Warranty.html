@@ -40,9 +40,16 @@
               <th>Phone Number</th>
               <th>Email</th>
               <th>UUID</th>
+              <th>Address</th>
+              <th>Postal Code</th>
+              <th>Start Date</th>
               <th>Time</th>
-              <th>Date</th>
-              <th>Warranty</th>
+              <th>End Date</th>
+              <th>Status</th>
+              <th>Update</th>
+              <th>Delete</th>
+              <th>Delivery</th>
+              
               <!-- If not lazy, can use supplied products instead of remarks -->
               <th></th>
             </tr>
@@ -59,8 +66,10 @@
               <td>{{ warranty.get_email() }}</td>
               <td>{{ warranty.get_warranty_UUID() }}</td>
               <td>{{ warranty.get_date_recorded() }}</td>
-              <td>{{ warranty.get_warranty_recorded() }}</td>
               <td>{{ warranty.get_time_recorded() }}</td>
+              <td>{{ warranty.get_warranty_recorded() }}</td>
+              <td>{{ warranty.get_Address() }}</td>
+              <td>{{ warranty.get_PostalCode() }}</td>
               <td>{{ warranty.get_delivery_status() }}</td>
               <td>
                 <form
@@ -70,15 +79,7 @@
                   <input type="submit" value="Update" class="btn btn-warning" />
                 </form>
               </td>
-              <td>
-                <a
-                  class="btn-link"
-                  href="#"
-                  data-toggle="modal"
-                  data-target="#editStatusModal"
-                  >Edit delivery status</a
-                >
-              </td>
+              
               <td>
                 <form
                   action="{{url_for('warranty_delete', id=warranty.get_warranty_id() )}}"
@@ -86,6 +87,15 @@
                 >
                   <input type="submit" value="Delete" class="btn btn-danger" />
                 </form>
+              </td>
+              <td>
+                <a
+                  class="btn btn-link"
+                  href="#"
+                  data-toggle="modal"
+                  data-target="#editStatusModal"
+                  >Edit delivery status</a
+                >
               </td>
             </tr>
             {% elif warranty.get_email() == current_user.email_address %}

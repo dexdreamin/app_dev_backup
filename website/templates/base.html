@@ -302,7 +302,7 @@
               <div class="dropdown-divider"></div><a class="dropdown-item" data-toggle="modal" data-target="#logoutModal"><i class="fi-logout me-2"></i>Sign Out</a>
             </div>
           </div>
-
+          
           <!--search bar-->
           <form class="btn btn-primary btn-sm rounded-pill ms-2 order-lg-3" action="{{ url_for('market_page') }}" method="GET"
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -390,8 +390,9 @@
 
                     </ul>
                   </li>
+                  {% endif %}
                 </ul>
-                {% endif %}
+                
                 
               </li>
               <li class="nav-item dropdown">
