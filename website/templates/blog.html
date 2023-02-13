@@ -93,16 +93,65 @@
           .post{
             width:270%;
           }
+
+          input:hover {
+            background-color: #f2f2f2;
+            color: black;
+            cursor: pointer;
+        }
+        input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .scroll-down-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #000000;
+            color: #ffffff;
+            border: 0;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s ease-in-out;
+          }
+          
+          .scroll-down-button:hover {
+            background-color: #ffffff;
+            color: #000000;
+            cursor: pointer;
+          }
+          
+          .scroll-down-button i {
+            font-size: 24px;
+          }
     </style>
-  </head>
-  <body>
-    <h1 class="text-center title">Anonymous suggestion</h1>
-    <div class="container">
-      
+</head>
+<body>
+  <h1 class="text-center title"><br>Anonymous suggestion<br><br></h1>
+  <div class="container">
+    <form action="/search" method="post" class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search Posts or Comments" aria-label="Search" name="search_query">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    {% if search_results %}
+    {% for result in search_results %}
+      <div class="search-result">
+        <h3>{{ result.comment }}</h3>
+        <h1>{{ result.text }}</h1>
+        <p>{{ result.content }}</p>
+      </div>
+    {% endfor %}
+  {% else %}
+    <h2>No results found</h2>
+  {% endif %}
       
       {% if blogs %}
       {% for blog in blogs %}
-      <h3>{{ blog.text }}<br></h3>
+      <h3><br>{{ blog.text }}<br></h3>
       <br>
       {% if blog.comments %}
         <h5>Comments</h5>
@@ -115,8 +164,9 @@
       {% endif %}
       <form action="/blog" method="post">
         <input type="hidden" name="blog_id" value="{{ loop.index }}">
-        <textarea name="comment"></textarea><br><br>
+        <textarea name="comment"></textarea>
         <input type="submit" value="Comment">
+        <br>
       </form>
       
     {% endfor %}
@@ -129,6 +179,8 @@
         <br><br><br>
         <form   action="/blog" method="post">
             <button type="submit" class="btn btn-primary">Post</button>
+            <button class="btn btn-primary" onclick="history.back();">Back</button>
+            <a href="{{ url_for('market_page') }}" class="btn btn-primary">Shop</a><br>
             <div>
               <textarea class="post" name="blog" class="form-control"></textarea>
               <br><br>
@@ -148,7 +200,9 @@
                 Dislike
             </button>
         </form>
-        
+        <button  id="scrollBtn" class="scroll-down-button">
+            <i class="fas fa-chevron-down"></i>
+          </button>
   </body>
   <script>
     $(document).ready(function() {
@@ -162,4 +216,17 @@
       });
     });
   </script>
+  <script>
+    document.getElementById("scrollBtn").addEventListener("click", function() {
+      window.scroll({
+        top: document.body.scrollHeight,
+        left: 0,
+        behavior: "smooth"
+      });
+    });
+  </script>
+  
+
+<script>
+
 </html>
