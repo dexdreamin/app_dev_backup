@@ -41,7 +41,7 @@
           <th>{{ retail.get_location() }}</th>
           <th>{{ retail.get_map_url() }}</th>
           <th><a href="{{ retail.get_map_url() }}" target="_blank" class="btn btn-primary">Go to Location</a></th>
-          <th><a href="{{ url_for('location_edit', id=current_user.retailer_id) }}" class="btn btn-warning">Update location</a></th>
+          <th><a href="{{ url_for('retail_information', id=current_user.retailer_id) }}" class="btn btn-warning">Update location</a></th>
           {% if retail.get_location_image() == None %}
               <th><a href="{{ url_for('add_location_pic', id=current_user.retailer_id) }}" class="btn btn-warning">Add location picture</a></th>
           {% else %}

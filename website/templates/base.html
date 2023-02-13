@@ -272,22 +272,22 @@
             {% endif %}
           
          <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-          <div class="dropdown d-none d-lg-block order-lg-3 my-n2 me-3"><a class="d-block py-2" href="job-board-account-profile.html">
+          <div class="dropdown d-none d-lg-block order-lg-3 my-n2 me-3"><a class="d-block py-2" href="#">
             {% if current_user.profile_pic %}
-                                <img class="rounded-circle"  width="40px"
-                                    src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}">
-                                {% else %}
-                                <img src="{{ url_for('static', filename='images/avatars/avatar1.jpg')}}"  width="40px" style="border-radius: 50%;">
-                                {% endif %}
+            <img class="rounded-circle"  width="40px"
+                src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}">
+            {% else %}
+            <img src="{{ url_for('static', filename='images/avatars/avatar1.jpg')}}"  width="40px" style="border-radius: 50%;">
+            {% endif %}
 
             <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
               <div class="d-flex align-items-start border-bottom border-light px-3 py-1 mb-2" style="width: 16rem;">
                 {% if current_user.profile_pic %}
-                                <img class="rounded-circle"  width="40px"
-                                    src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}">
-                                {% else %}
-                                <img src="{{ url_for('static', filename='images/avatars/avatar1.jpg')}}"  width="40px" style="border-radius: 50%;">
-                                {% endif %}
+                <img class="rounded-circle"  width="40px"
+                    src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/avatars/avatar1.jpg')}}"  width="40px" style="border-radius: 50%;">
+                {% endif %}
                 <div class="ps-2">
                   <h6 class="fs-base text-light mb-0">Admin</h6>
                   <div class="fs-xs py-2">"You have the skills and abilities to achieve great things. Believe in yourself and keep pushing forward."</div>
@@ -299,7 +299,7 @@
                   <a class="dropdown-item" href="{{ url_for('appointment') }}"><i  class="fas fa-regular fa-calendar-check fa-sm fa-fw mr-2 text-gray-400"></i>Bookings</a>
                   <a class="dropdown-item" href="{{ url_for('notes') }}"><i  class="far fa-sticky-note fas fa-sm fa-fw mr-2 text-gray-400"></i>Notes</a>
                   <a class="dropdown-item" href="{{ url_for('ticket_history') }}"><i  class="fa fa-solid fa-envelope-open-text fas fa-sm fa-fw mr-2 text-gray-400"></i>Ticket History</a>
-              <div class="dropdown-divider"></div><a class="dropdown-item" href="signin-light.html"><i class="fi-logout me-2"></i>Sign Out</a>
+              <div class="dropdown-divider"></div><a class="dropdown-item" data-toggle="modal" data-target="#logoutModal"><i class="fi-logout me-2"></i>Sign Out</a>
             </div>
           </div>
 

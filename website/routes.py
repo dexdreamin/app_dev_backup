@@ -4255,16 +4255,8 @@ def retrieve_retailers():
     retailer_dict = {}
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
     retailer_dict = retailer_db["Retailers"]
-    location_dict = {}
-    location_db = shelve.open('website/databases/retailer/location.db', 'r')    
-    location_list = []
     
-    location_dict = location_db["Location"]
 
-    for key in location_dict:
-        location = location_dict.get(key)
-        location = location.get_location()
-        location_list.append(location)
 
     print(retailer_dict)
 
@@ -4284,7 +4276,7 @@ def retrieve_retailers():
         # location_list.append(retail_location)
         retailers_list.append(retail)
 
-    return render_template('retail_database.html', count=len(retailers_list), retailers_list=retailers_list, retailersid_list=retailersid_list, users=users, location_list=location_list)
+    return render_template('retail_database.html', count=len(retailers_list), retailers_list=retailers_list, retailersid_list=retailersid_list, users=users)
 
 
 @app.route('/retailers/create', methods=['GET', 'POST'])
@@ -4375,6 +4367,23 @@ def update_retailer(id):
 
             retailer_db['Retailers'] = retailer_dict
             retailer_db.close()
+
+            location_dict = {}
+            location_db = shelve.open('website/databases/retailer/location.db', 'w')
+            location_dict = location_db["Location"]
+            location = location_dict.get(id)
+            location.set_location_img(form)
+            location.set_company_id(form.company_id.data)
+            location.set_location(form.shop.data)
+            location.set_email_address(form.email_address.data)
+            location.set_postal_code(form.postal_code.data)
+            location.set_office_no(form.office_no.data)
+            location.set_unit_number(form.unit_number.data)
+            location.set_address(form.address.data)
+            location.set_map_url(form.location.data)
+
+            location_db['Location'] = location_dict
+            location_db.close()
             flash("Retailer information updated successfully!", category="success")
             if current_user.id == 1:
                 return redirect(url_for('retrieve_retailers'))
@@ -4814,6 +4823,10 @@ def update_location_pic(id):
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
     retailer_dict = retailer_db['Retailers']
     retailer = retailer_dict.get(id)
+    location_dict = {}
+    location_db = shelve.open('website/databases/retailer/location.db', 'w')
+    location_dict = location_db['Location']
+    location = location_dict.get(id)
 
     if request.method == 'POST':
             if form.validate_on_submit():
@@ -4831,12 +4844,16 @@ def update_location_pic(id):
 
                     # Change it to a string to save to db
                     retailer.set_location_img(pic_name)
+                    location.set_location_img(pic_name)
 
                     retailer_db['Retailers'] = retailer_dict
                     retailer_db.close()    
                     
+                    location_db['Location'] = location_dict
+                    location_db.close()  
+
                     saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
-                    flash("Location pic successfully!", category='success')
+                    flash("Location pic uploaded successfully!", category='success')
                     return redirect(url_for("retail_profile"))
             else:
                 if form.errors != {}:  # If there are not errors from the validations
