@@ -1,19 +1,32 @@
+{% if current_user.is_authenticated == True %}
 {% if current_user.admin == 1 %}
 {% extends "base.html" %}
 {% else %}
 {% extends "based.html" %}
 {% endif %}
+{% else %}
+{% extends "base2.html" %}
+{% endif %}
 {% block title %}Locate our shops!{% endblock %}
 
 {% block content %}
+<!-- Bootstrap core JavaScript-->
+<script src="../static/vendor/jquery/jquery.slim.min.js"></script>
+<script src="../static/vendor/jquery/jquery.min.js"></script>
+<script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
 
 <h1>Locate our official retail shops!</h1>
+<br>
 {% for retailer in retailer_list %}
     {% if retailer.get_location_image() in image_list %}
         <div class="card" style="width: 50%;">
             <img class="card-img-top" src="{{ url_for('static', filename='images/profile_pic/'+retailer.get_location_image() )}}" alt="Card image cap" height="200px" width="50px">
             <div class="card-body">
-            <h5 class="card-title">Shop name: {{ retailer.get_location() }}</h5>
+            <h5 class="card-title">Outlet: {{ retailer.get_location() }}</h5>
             <p class="card-text">Shop unit number: {{ retailer.get_unit_number() }}</p>
             <p class="card-text">Shop address: {{ retailer.get_address()}}</p>
             <p class="card-text">Postal code: {{ retailer.get_postal_code() }}</p>

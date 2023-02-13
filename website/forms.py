@@ -394,17 +394,12 @@ class RegisterRetailAccountForm(FlaskForm):
 
 class RegisterRetailerForm(FlaskForm):
     company_id = StringField(label="Company ID: ", validators=[DataRequired()])
-    shop = StringField(label='Name of retail shop: ',
-                       validators=[DataRequired()])
-    postal_code = IntegerField(label='Postal code: ', validators=[
-                               NumberRange(0, 999999), DataRequired()])
-    unit_number = StringField(label='Unit-number: ',
-                              validators=[DataRequired(), Length(max=7)])
+    shop = StringField(label='Name of outlet: ', validators=[DataRequired()])
+    postal_code = IntegerField(label='Postal code: ', validators=[DataRequired(), NumberRange(0, 999999)])
+    unit_number = StringField(label='Unit-number: ', validators=[DataRequired(), Length(max=6)])
     address = StringField(label="Address: ", validators=[DataRequired()])
-    office_no = StringField(label="Office number: ", validators=[
-                            Length(min=8, max=8), DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[
-                               Email(), DataRequired()])
+    office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
     location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
     location_pic = FileField(label="Location picture: ")
     submit = SubmitField(label="Submit")
@@ -412,19 +407,13 @@ class RegisterRetailerForm(FlaskForm):
 
 class UpdateRetailerForm(FlaskForm):
     company_id = StringField(label="Company ID: ", validators=[DataRequired()])
-    shop = StringField(label='Name of retail shop: ',
-                       validators=[DataRequired()])
-    postal_code = IntegerField(label='Postal code: ', validators=[
-                               NumberRange(0, 999999), DataRequired()])
-    unit_number = StringField(label='Unit-number: ',
-                              validators=[DataRequired()])
+    shop = StringField(label='Name of outlet: ', validators=[DataRequired()])
+    postal_code = IntegerField(label='Postal code: ', validators=[NumberRange(0, 999999), DataRequired()])
+    unit_number = StringField(label='Unit-number: ', validators=[DataRequired(), Length(max=6)])
     address = StringField(label="Address: ", validators=[DataRequired()])
-    office_no = StringField(label="Office number: ", validators=[
-                            Length(min=8, max=8), DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[
-                               Email(), DataRequired()])
-    location = StringField(
-        label="Google Maps location URL: ", validators=[DataRequired()])
+    office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
     submit = SubmitField(label="Update")
 
 

@@ -124,8 +124,7 @@ def check_password_strength(password):
 @app.context_processor
 def cart_database():
     Cart_Dict = {}
-    Shopping_Cart_Database = shelve.open(
-        'website/databases/shoppingcart/cart.db', 'c')
+    Shopping_Cart_Database = shelve.open('website/databases/shoppingcart/cart.db', 'c')
     try:
         print(current_user)
         # Shopping Cart Database
@@ -327,29 +326,45 @@ def delete_profile():
 @app.route('/deleteRetailProfile/<int:id>')
 @login_required
 def delete_retail_profile(id):
-    location_dict = {}
-    location_db = shelve.open('website/databases/retailer/location.db', 'w')
-    location_dict = location_db['Location']
-    db.create_all()
-    userID = User.query.filter_by(id=current_user.id).first()
-   
-    current_id = location_dict.get(id)
-    location_dict.pop(id)
-    location_db['Location'] = location_dict
+    try:
+        location_dict = {}
+        location_db = shelve.open('website/databases/retailer/location.db', 'w')
+        location_dict = location_db['Location']
+        retailer_dict = {}
+        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
+        retailer_dict = retailer_db['Retailers']
+        
+        db.create_all()
+        userID = User.query.filter_by(id=current_user.id).first()
+    
+        current_id = location_dict.get(id)
+        location_dict.pop(id)
+        location_db['Location'] = location_dict
 
-    if current_id not in location_db['Location']:
-        flash("Deletion Successful!", category="success")
-    else:
-        flash("Deletion unsuccessful!", category='danger')
+        
+        current_id = retailer_dict.get(id)
+        retailer_dict.pop(id)
+        retailer_db['Retailers'] = retailer_dict
 
-    db.session.delete(userID)
-    db.session.commit()
-    location_db.close()
-    logout_user()
-    flash("Account Deleted Successfully", category="success")
-    return redirect(url_for("home_page"))
+        if current_id not in location_db['Location']:
+            flash("Deletion Successful!", category="success")
+        else:
+            flash("Deletion unsuccessful!", category='danger')
 
+        db.session.delete(userID)
+        db.session.commit()
+        location_db.close()
+        retailer_db.close()
 
+        logout_user()
+        flash("Account Deleted Successfully", category="success")
+
+    
+    except IOError:
+        flash("Something went wrong with the shelve database!", category='danger')
+
+    finally:
+        return redirect(url_for("landing_page"))
 
 @app.route('/sudo_deleteProfile/<int:id>')
 @login_required
@@ -2402,8 +2417,7 @@ def register_staff_account():
                     [f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
                 flash(f'{err_message}', category='danger')
 
-            db_tempemail = shelve.open(
-                'website/databases/tempemail/tempemail.db', 'c')
+            db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
             try:
                 db_tempemail['email'] = user_email
                 db_tempemail.close()
@@ -2411,6 +2425,17 @@ def register_staff_account():
                 print(f'{e} error has occurred! Database will close!')
                 db_tempemail.close()
                 return redirect(url_for('register_staff_account'))
+            
+            '''
+            staff_db = shelve.open('/website/databases/staff/staff.db', 'c')
+            try:
+                staff_dict = staff_db['Staff']
+                
+            except Exception as e:
+                print(f'{e} error has occurred! Database will close!')
+                
+                return redirect(url_for('register_staff_account'))
+            '''
 
             msg = Message('Login credentials for staff account creation', sender='agegracefullybothelper@gmail.com',
                           recipients=[form.work_email.data])
@@ -2733,8 +2758,7 @@ def register_page():
                 db.session.add(user_to_create)
                 db.session.commit()
                 login_user(user_to_create)
-                flash(
-                    f"Success! You are logged in as: {user_to_create.username}", category='success')
+                flash(f"Success! You are logged in as: {user_to_create.username}", category='success')
 
                 return redirect(url_for('home_page'))
             if form.errors != {}:  # If there are not errors from the validations
@@ -4789,13 +4813,13 @@ def update_location_pic(id):
     retailer_dict = {}
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
     retailer_dict = retailer_db['Retailers']
-
+    retailer = retailer_dict.get(id)
 
     if request.method == 'POST':
             if form.validate_on_submit():
                 if request.files['location_pic']:
                     location_pic = request.files['location_pic']
-                    retailer = retailer_dict.get(id)
+                    
                     # Grab Image Name
                     pic_filename = secure_filename(location_pic.filename)
                     # Set UUID
@@ -4813,7 +4837,7 @@ def update_location_pic(id):
                     
                     saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
                     flash("Location pic successfully!", category='success')
-                    return redirect(url_for("location", id=retailer.get_retailer_id()))
+                    return redirect(url_for("retail_profile"))
             else:
                 if form.errors != {}:  # If there are not errors from the validations
                     errors = []
@@ -4821,9 +4845,10 @@ def update_location_pic(id):
                         errors.append(err_msg)
                     err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
                     flash(f'{err_message}', category='danger')
-                    return redirect(url_for('location_database'))
+                    return redirect(url_for("retail_information", id=retailer.get_retailer_id()))
 
-    return render_template('update_location_picture.html', form=form)
+
+    return render_template('update_location_picture.html', form=form, retailer=retailer)
 
 @app.route('/add_to_location_db/<int:id>', methods=["GET", "POST"])
 @login_required
