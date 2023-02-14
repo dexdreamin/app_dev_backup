@@ -344,6 +344,10 @@
                 <ul class="dropdown-menu dropdown-menu-dark">
                   <li><a class="dropdown-item" href="{{ url_for('warranty_page') }}">Warranty</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('Add_Item') }}">Add Item</a></li>
+                  {% if current_user.usertype == "retailers" %}
+                    <li><a class="dropdown-item" href="{{ url_for('owned_items') }}">Your owned items</a></li>
+
+                  {% endif %}
                   <li><a class="dropdown-item" href="{{ url_for('retrieve_items') }}">Items Dashboard</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('Events_Page') }}">Events</a></li>
                 </ul>

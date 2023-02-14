@@ -228,8 +228,7 @@ def profile_page():
     Products = {}
     try:
         Item_Database = shelve.open('website/databases/items/items.db', 'r')
-        Wish_Database = shelve.open(
-            'website/databases/wishlist/wishlist.db', 'r')
+        Wish_Database = shelve.open('website/databases/wishlist/wishlist.db', 'r')
 
         if str(current_user.id) in Wish_Database:
             Wish_Dict = Wish_Database[str(current_user.id)]
@@ -1720,6 +1719,25 @@ def retrieve_items():
 
     return render_template('retrieveItems.html', count=len(items_list), items_list=items_list)
 
+@app.route("/ownedItems", methods=['POST', 'GET'])
+def owned_items():
+    Items_Dict = {}
+    Item_Database = shelve.open('website/databases/items/items.db', 'r')
+    Items_Dict = Item_Database['ItemInfo']
+    print(Items_Dict)
+
+    Item_Database.close()
+
+    owned_items_list = []
+
+    for key in Items_Dict:
+        item = Items_Dict.get(key)
+        if item.get_owner() == current_user.username:
+            owned_items_list.append(item)
+
+
+    return render_template('owned_items.html', count=len(owned_items_list), items_list=owned_items_list)
+
 
 @app.route('/updateItem/<id>', methods=['GET', 'POST'])
 def update_item(id):
@@ -1817,6 +1835,64 @@ def delete_item(id):
     Item_Database.close()
 
     return redirect(url_for('retrieve_items'))
+
+@app.route('/updateOwnedItem/<id>', methods=['GET', 'POST'])
+def update_owned_item(id):
+    update_item_form = Add_Item_Form()
+    Items_Dict = {}
+
+    try:
+        Item_Database = shelve.open('website/databases/items/items.db', 'w')
+        #Your_Products_Database = shelve.open('website/databases/products/products.db', 'c')
+        if 'ItemInfo' in Item_Database:
+            Items_Dict = Item_Database['ItemInfo']
+        else:
+            Item_Database['ItemInfo'] = Items_Dict
+
+    except IOError:
+        print("Unable to Read File")
+
+    except Exception as e:
+        print(f"An unknown error has occurred,{e}")
+
+    else:
+        if request.method == 'POST' and update_item_form.validate():
+            item = Items_Dict.get(id)
+            item.set_name(update_item_form.name.data)
+            item.set_quantity(update_item_form.quantity.data)
+            item.set_description(update_item_form.description.data)
+            item.set_price(update_item_form.price.data)
+            Item_Database['ItemInfo'] = Items_Dict
+            Item_Database.close()
+
+            return redirect(url_for('owned_items'))
+        else:
+            Item_Database = shelve.open(
+                'website/databases/items/items.db', 'r')
+            Items_dict = Item_Database['ItemInfo']
+            Item_Database.close()
+
+            item = Items_dict.get(id)
+            update_item_form.name.data = item.get_name()
+            update_item_form.quantity.data = item.get_quantity()
+            update_item_form.description.data = item.get_description()
+            update_item_form.price.data = item.get_price()*0.8
+
+        return render_template('UpdateOwnedItem.html', update_item_form=update_item_form), 200
+    
+    @app.route('/deleteOwnedItem/<id>', methods=['POST'])
+    def delete_owned_item(id):
+        Item_dict = {}
+        Item_Database = shelve.open('website/databases/items/items.db', 'w')
+        Items_Dict = Item_Database['ItemInfo']
+
+        Items_Dict.pop(id)
+
+        Item_Database["ItemInfo"] = Items_Dict
+        Item_Database.close()
+
+        return redirect(url_for('owned_items'))
+
 
 
 @app.route('/PurchaseItem', methods=['POST', 'GET'])

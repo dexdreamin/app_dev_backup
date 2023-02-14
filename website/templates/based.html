@@ -1278,15 +1278,14 @@
             <div class="dropdown-menu dropdown-menu-animated" aria-labelledby="homeDropdown">
               <a class="dropdown-item" href="{{ url_for('ticket_requests_page') }}">Ticket Request </a>
               <a class="dropdown-item" href="{{ url_for('Add_Item') }}">Add Item</a>
-              <a class="dropdown-item" href="{{ url_for('retrieve_items') }}">Items Dashboard </a>
+              <a class="dropdown-item" href="{{ url_for('owned_items') }}">Your owned items</a>
               <a class="dropdown-item" href="{{ url_for('Events_Page') }}">Events</a>
               <a class="dropdown-item" href="{{ url_for('Feedbacks') }}">User Feedbacks </a>
               <a class="dropdown-item" href="{{ url_for('Inventory_Management') }}">Inventory</a>
               <div class="dropdown-divider"></div><a class="dropdown-item" style="display:none;" href="{{ url_for('wish_list') }}">My wishlist </a>
-              <a class="dropdown-item" href="{{ url_for('retail_information', id=current_user.retailer_id) }}">Your location info</a>
+              <a class="dropdown-item" href="{{ url_for('retail_information', id=current_user.retailer_id) }}">Your shop information</a>
               <a class="dropdown-item" href="{{ url_for('update_location_pic', id=current_user.retailer_id) }}">Update location picture</a>
               <a class="dropdown-item" href="{{ url_for('location_edit', id=current_user.retailer_id) }}">Edit Location </a>
-              <a class="dropdown-item" href="{{ url_for('location', id=current_user.retailer_id) }}">Your Location</a>
             </div>
           </li>
         
@@ -1457,6 +1456,10 @@ aria-labelledby="alertsDropdown">
               <li class="nav-item dropdown"><a class="nav-link ps-0 dropdown-toggle" id="navbarDropdownMenuLink" href="#" data-bs-target="#sidebarSubmenu" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false">Profile menu</a>
                 <div class="collapse" id="sidebarSubmenu">
                   <ul class="nav flex-column ms-3">
+                    <li class="nav-item"><a class="dropdown-item" href="{{ url_for('profile_page') }}">
+                      <span class="material-symbols-outlined">person</span>
+                      View profile</a>
+                    </li>
                     <li class="nav-item"><a class="dropdown-item" href="{{ url_for('past_orders') }}">
                       <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                       Past Orders
