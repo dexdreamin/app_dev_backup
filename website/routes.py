@@ -5173,3 +5173,36 @@ def search():
 
     return render_template("blog.html", search_results=search_results, search_text=search_text)
 
+@app.route("/bloga")
+def bloga():
+    blog = []
+    with shelve.open("website/databases/retailer/bloga.db") as db:
+        for blog_id in db:
+            blog.append((
+                blog_id, 
+                db[blog_id]
+                ))
+    return render_template("bloga.html", blog=blog)
+
+@app.route("/post_comment", methods=["POST"])
+def post_comment():
+    comment = request.form["comment"]
+    with shelve.open("website/databases/retailer/bloga.db") as db:
+        blog_id = str(len(db) + 1)
+        db[blog_id] = comment
+    return redirect(url_for("bloga"))
+
+@app.route("/delete_comment/<blog_id>", methods=["POST"])
+def delete_comment(blog_id):
+    with shelve.open("website/databases/retailer/bloga.db") as db:
+        del db[blog_id]
+    return redirect(url_for("bloga"))
+
+@app.route("/edit_comment/<blog_id>", methods=["GET", "POST"])
+def edit_comment(blog_id):
+    with shelve.open("website/databases/retailer/bloga.db") as db:
+        if request.method == "GET":
+            return render_template("bloge.html", comment=db[blog_id], blog_id=blog_id)
+        else:
+            db[blog_id] = request.form["comment"]
+            return redirect(url_for("bloga"))

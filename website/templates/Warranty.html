@@ -57,7 +57,7 @@
 
           <tbody></tbody>
           <tbody>
-            {% for warranty in warranty_list %} {% if current_user.id == 1 %}
+            {% for warranty in warranty_list %} {% if current_user.id == 1 %}{% if warranty.get_warranty_recorded() ==  %}
             <tr>
               <td>{{ warranty.get_warranty_id() }}</td>
               <td>{{ warranty.get_warranty_name() }}</td>
