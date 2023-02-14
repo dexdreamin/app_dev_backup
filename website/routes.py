@@ -2914,21 +2914,22 @@ def landing_page():
     form = LoginForm()
     if form.validate_on_submit():
         # if user exist and if password is correct
-        attempted_user = User.query.filter_by(
-            username=form.username.data).first()
+        attempted_user = User.query.filter_by(username=form.username.data).first()
         if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
             if attempted_user.account_availability(attempted_user.status) == "sven":
                 return redirect(url_for('home_page'))
             elif attempted_user.account_availability(attempted_user.status) != 0:
                 # checks username for valid user and checks if password is correct
                 login_user(attempted_user)
-                # 'login_user' is a built-in function for flask_login
-                flash(
-                    f"Success! You are logged in as: {attempted_user.username}", category='success')
-                if current_user.usertype == "retailers":
-                    return redirect(url_for('retail_homepage'))
-                else:
+                if current_user.usertype == 'customers':
+                    # 'login_user' is a built-in function for flask_login
+                    flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
                     return redirect(url_for('home_page'))
+                else:
+                    logout_user()
+                    flash(f"If you are not a customer, please login to the professional login page side. ", category='danger')
+                    return redirect(url_for('landing_page'))
+
             else:
                 flash(f"{attempted_user.username} account has been disabled!"
                       f" Please contact Customer Support for more information.", category='danger')
@@ -2955,13 +2956,17 @@ def pro_login():
             elif attempted_user.account_availability(attempted_user.status) != 0:
                 # checks username for valid user and checks if password is correct
                 login_user(attempted_user)
-                # 'login_user' is a built-in function for flask_login
-                flash(
-                    f"Success! You are logged in as: {attempted_user.username}", category='success')
-                if current_user.usertype == "retailers":
-                    return redirect(url_for('retail_homepage'))
+                if current_user.usertype != 'customers':
+                    # 'login_user' is a built-in function for flask_login
+                    flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
+                    if current_user.usertype == "retailers":
+                        return redirect(url_for('retail_homepage'))
+                    else:
+                        return redirect(url_for('home_page'))
                 else:
-                    return redirect(url_for('home_page'))
+                    logout_user()
+                    flash(f"If you are a customer, please login to the customer login page side. ", category='danger')
+                    return redirect(url_for('pro_login'))
             else:
                 flash(f"{attempted_user.username} account has been disabled!"
                       f" Please contact Customer Support for more information.", category='danger')
