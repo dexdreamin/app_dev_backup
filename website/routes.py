@@ -2335,56 +2335,6 @@ def staff_page():
 
     return render_template('staff.html', count=len(staff_list), staffid_list=staffid_list, staff_list=staff_list, users=users)
 
-
-@app.route('/add_staff', methods=['GET', 'POST'])
-def add_staff_page():
-    form = CreateStaffForm()
-    db_shelve = shelve.open('website/databases/staff/staff.db', 'c')
-    db_shelve_uniqueID = shelve.open(
-        'website/databases/staff/staff_uniqueID.db', 'c')
-    staff_dict = {}
-    ids = 0
-    try:
-        if 'Staff' in db_shelve:
-            staff_dict = db_shelve['Staff']
-        else:
-            db_shelve['Staff'] = staff_dict
-        if 'ID' in db_shelve_uniqueID:
-            ids = db_shelve_uniqueID['ID']
-        else:
-            db_shelve_uniqueID['ID'] = ids
-    except:
-        print("Error in retrieving Staff from database")
-
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            staff = Staff(name=form.name.data,
-                          location=form.location.data,
-                          email=form.email.data)
-            ids += 1
-            staff.set_id(ids)
-            staff.set_staff_count(ids)
-            staff_dict[ids] = staff
-            db_shelve['Staff'] = staff_dict
-            db_shelve_uniqueID['ID'] = ids
-            flash("Record submitted Successfully", category='success')
-            db_shelve.close()
-            db_shelve_uniqueID.close()
-            return redirect(url_for('landing_page'))
-        else:
-            if form.errors != {}:  # If there are not errors from the validations
-                errors = []
-                for err_msg in form.errors.values():
-                    errors.append(err_msg)
-                err_message = '<br/>'.join(
-                    [f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-                flash(f'{err_message}', category='danger')
-            flash("An Error Occurred trying to submit Form", category='danger')
-            return redirect(url_for('add_staff_page'))
-
-    return render_template('RegisterStaff.html', form=form)
-
-
 @app.route('/deleteStaff/<int:id>', methods=['POST'])
 def delete_staff(id):
     staff_dict = {}

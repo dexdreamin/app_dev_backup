@@ -1,4 +1,4 @@
-{% if current_user.admin == 1 %}
+{% if current_user.admin == 1 or current_user.usertype == 'staff' %}
 {% extends "base.html" %}
 {% else %}
 {% extends "based.html" %}
@@ -49,7 +49,7 @@
                         </div>
                         <div class="text">
                             <br>
-                            <a href="{{ url_for('update_description') }}" class="btn-link" type="submit"><i class="glyphicon glyphicon-ok-sign"></i>Edit User Profile</a>&nbsp;
+                            <a href="{{ url_for('update_description') }}" class="btn-link" type="submit"><i class="glyphicon glyphicon-ok-sign"></i>Edit User Description</a>&nbsp;
                         </div>
                 </figure>
                 <hr>
@@ -70,15 +70,19 @@
                     <i class="fa fa-regular fa-envelope"></i> &nbsp; Email:
                      <br>
                     <strong>{{ current_user.email_address }}</strong> &nbsp;
+                    {% if current_user.usertype == customers %}
                     <a class="btn-link" href="#" data-toggle="modal" data-target="#editEmailModal">Edit Email</a>
+                    {% endif %}
                 </p>
-<!--                <p>-->
-<!--                    <i class="fa fa-map-marker text-muted"></i> &nbsp; My address:-->
-<!--                     <br>-->
-<!--                    <strong>Tashkent city, Street name, Building 123, House 321</strong> &nbsp;-->
-<!--                    <a href="#" class="btn-link"> Edit</a>-->
-<!--                </p>-->
-               
+                {% if current_user.usertype == "staff" %}
+                <p>
+                    <i class="fa fa-solid fa-user-astronaut"></i> &nbsp; Staff ID:
+                     <br>
+                    <strong>{{ current_user.staff_id}}</strong> &nbsp;
+                </p>
+                
+                {% endif %}
+<!--              
                 </div>
                 <div class="col-md-4">
                     <br>
@@ -110,7 +114,7 @@
                         </div>
                     </figure>
                     {% endif %}
-                </article>
+                </article>-->
 
 
             </div> <!-- card-body .// -->
