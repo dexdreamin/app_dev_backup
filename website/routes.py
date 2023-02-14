@@ -335,7 +335,7 @@ def delete_retail_profile(id):
         
         db.create_all()
         userID = User.query.filter_by(id=current_user.id).first()
-    
+        
         current_id = location_dict.get(id)
         location_dict.pop(id)
         location_db['Location'] = location_dict

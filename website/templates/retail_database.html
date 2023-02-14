@@ -8,8 +8,8 @@
 
 <!-- Supplier Table -->
 {% block content %}
-<div class="container-fluid" style="overflow-x: scroll;">
-<h1 class="display-4">Request from retailers</h1>
+<div class="container">
+<h1 class="display-4" style="margin-left: 10%;">Request from retailers</h1>
 
 {% if count == 0 %}
   <br>
@@ -31,9 +31,10 @@
           <th>Year Registered</th>
           <th>
             <a href="{{ url_for('retail_management') }}" class="btn btn-primary float-right">
-              &nbsp;Go to Retailer list<span class="material-symbols-outlined">
-                arrow_forward
-                </span></a>
+              &nbsp;Go to Retailer list
+              <span class="material-symbols-outlined">
+                arrow_right_alt
+                </span>
           </th>
         </tr>
       </thead>
