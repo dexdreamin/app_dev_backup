@@ -42,9 +42,13 @@ db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
 db_tempemail['email'] = None
 db_tempemail.close()
 
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 photos = UploadSet('photos', IMAGES)
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+  
 
 def configure_app(app):
     configure_uploads(app, photos)
@@ -335,7 +339,7 @@ def delete_retail_profile(id):
         
         db.create_all()
         userID = User.query.filter_by(id=current_user.id).first()
-        
+
         current_id = location_dict.get(id)
         location_dict.pop(id)
         location_db['Location'] = location_dict
@@ -429,7 +433,7 @@ def update_profile_pic():
     if request.method == 'POST':
         userID = User.query.filter_by(id=current_user.id).first()
         # Check for profile pic
-        if request.files['profile_pic']:
+        if request.files['profile_pic'] and allowed_file(request.files['profile_pic'].filename):
             userID.profile_pic = request.files['profile_pic']
 
             # Grab Image Name
@@ -455,6 +459,9 @@ def update_profile_pic():
                     err_message = '<br/>'.join(
                         [f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
                     flash(f'{err_message}', category='danger')
+            return redirect(url_for('profile_page'))
+        else:
+            flash('Filetype not supported, only png, jpg and jpeg are supported.', category='danger')
             return redirect(url_for('profile_page'))
 
 
@@ -3474,7 +3481,7 @@ def warranty_page():
 
         print("Warranty: ", users)
 
-    return render_template('warranty.html', count=len(warranty_list), warranty_list=warranty_list, users=users, delivery_form=delivery_form)
+    return render_template('Warranty.html', count=len(warranty_list), warranty_list=warranty_list, users=users, delivery_form=delivery_form)
 
 
 @app.route('/user_management')
