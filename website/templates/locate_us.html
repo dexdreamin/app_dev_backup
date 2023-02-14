@@ -1,15 +1,5 @@
-{% if current_user.is_authenticated == True %}
-{% if current_user.usertype == "staff" or current_user.admin == 1 %}
-{% extends "base.html" %}
-{% else %}
-{% extends "based.html" %}
-{% endif %}
-{% else %}
-{% extends "base2.html" %}
-{% endif %}
-{% block title %}Locate our shops!{% endblock %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-{% block content %}
 <style>
     body {
         background-color: #eff7ff;
@@ -101,4 +91,3 @@
     
 {% endfor %}
 <a href="javascript:history.back()" class="btn btn-primary">Back</a>
-{% endblock %}
