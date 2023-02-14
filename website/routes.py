@@ -1643,7 +1643,7 @@ def Add_Item():
             your_products_dict = Your_Products_Database[str(current_user.id)]
         else:
             Your_Products_Database[str(current_user.id)] = your_products_dict
-
+        
     except IOError:
         print("Unable to Read File")
 
@@ -1703,6 +1703,7 @@ def Add_Item():
                     print('Item added')
                     Item_Database.close()
                     Your_Products_Database.close()
+                
                     break
                 else:
                     continue
@@ -3286,8 +3287,13 @@ def create_warranty():
 @login_required
 def update_warranty(id):
     form = UpdatewarrantyForm()
-
-    if request.method == "POST" and form.validate_on_submit():
+    if form.errors != {}:  # If there are not errors from the validations
+        errors = []
+        for err_msg in form.errors.values():
+            errors.append(err_msg)
+        err_message = '<br/>'.join([f'({number}){error[0]}' for number,
+                                   error in enumerate(errors, start=1)])    
+    elif request.method == "POST" and form.validate_on_submit():
 
         warranty_dict = {}
         warranty_db = shelve.open(
@@ -3319,14 +3325,9 @@ def update_warranty(id):
         form.remarks.data = warranty.get_warranty_remarks()
         form.email.data = warranty.get_email()
         form.phone.data = warranty.get_phone_number()
+        
 
-    if form.errors != {}:  # If there are not errors from the validations
-        errors = []
-        for err_msg in form.errors.values():
-            errors.append(err_msg)
-        err_message = '<br/>'.join([f'({number}){error[0]}' for number,
-                                   error in enumerate(errors, start=1)])
-
+    
     return render_template('updatewarranty.html', form=form)
 
 
