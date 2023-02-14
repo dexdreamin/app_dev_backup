@@ -323,7 +323,7 @@ def delete_profile():
     db.session.commit()
     logout_user()
     flash("Account Deleted Successfully", category="success")
-    return redirect(url_for("home_page"))
+    return redirect(url_for("landing_page"))
 
 
 @app.route('/deleteRetailProfile/<int:id>')

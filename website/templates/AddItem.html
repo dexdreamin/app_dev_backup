@@ -1,9 +1,9 @@
-{% if current_user.usertype == "retailers" or current_user.usertype == "customers" %}
-{% extends "based.html" %}
+{% if current_user.usertype == "staff" or current_user.admin == 1 %}
+{% extends "base.html" %}
 {% else %}
-{% extends 'base.html' %}
+{% extends "based.html" %}
 {% endif %}
-{% block title %}Add Products {% endblock %}
+{% block title %}Home Page{% endblock %}
 {% block content %}
 
 <!-- <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
