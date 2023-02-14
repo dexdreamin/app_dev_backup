@@ -164,12 +164,7 @@
         <!-- Recent Orders card End-->
 
         <!-- Password and Authentication Card Start-->
-        <article class="card mb-3">
-            <div class="card-body neomorphic custom-cursor">
-                <h5 class="card-title custom-cursor mb-4">Sign out</h5>
-                <a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#signoutModal">Sign out</a>
-            </div>
-        </article>
+       
         <article class="card mb-3">
             <div class="card-body neomorphic custom-cursor">
                 <h5 class="card-title custom-cursor mb-4">Profile Picture </h5>
@@ -180,6 +175,8 @@
                 <a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#changepasswordModal"> Change Password  </a>
                 <br>
                 <br>
+                <h5 class="card-title custom-cursor mb-4">Sign out</h5>
+                <a href="{{ url_for('logout_page') }}" class="btn btn-outline-primary">Sign out</a>
                 {% if current_user.id != 1%}
                 <h5 class="card-title custom-cursor mb-4">Account Removal </h5>
                 <p>Warning Account Deletion Cannot be undone</p>
