@@ -4445,7 +4445,6 @@ def update_retailer(id):
             location_db = shelve.open('website/databases/retailer/location.db', 'w')
             location_dict = location_db["Location"]
             location = location_dict.get(id)
-            location.set_location_img(form)
             location.set_company_id(form.company_id.data)
             location.set_location(form.shop.data)
             location.set_email_address(form.email_address.data)
@@ -4592,6 +4591,7 @@ def register_retail_account(id):
             err_message = '<br/>'.join(
                 [f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
             flash(f'{err_message}', category='danger')
+            return redirect(url_for('register_retail_account', id=current_id))
 
         db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
         try:
