@@ -17,7 +17,7 @@ content %}
   <!-- Content Row -->
   <div class="row">
     <!-- Earnings Card  -->
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
       <div class="card border-left-primary shadow h-100 py-2">
         <div class="card-body neomorphic custom-cursor">
           <div class="row no-gutters align-items-center">
@@ -40,7 +40,7 @@ content %}
     </div>
 
     <!-- Spending Card -->
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
       <div class="card border-left-success shadow h-100 py-2">
         <div class="card-body neomorphic custom-cursor">
           <div class="row no-gutters align-items-center">
@@ -63,7 +63,7 @@ content %}
     </div>
 
     <!-- Orders Card  -->
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
       <div class="card border-left-info shadow h-100 py-2">
         <div class="card-body neomorphic custom-cursor">
           <div class="row no-gutters align-items-center">
@@ -74,11 +74,9 @@ content %}
                 Orders
               </div>
               <div class="row no-gutters align-items-center">
-                <div class="col-auto">
                   <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
                     {{owned_items|length}}
                   </div>
-                </div>
                 <!--                                <div class="col">-->
                 <!--                                    <div class="progress progress-sm mr-2">-->
                 <!--                                        <div class="progress-bar bg-info" role="progressbar"-->
@@ -97,7 +95,51 @@ content %}
     </div>
 
     <!-- Number of Messages Card -->
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body neomorphic custom-cursor">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+               Visitors
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{visitor_count}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <span class="material-symbols-outlined">
+                timeline
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body neomorphic custom-cursor">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+               Accounts Available
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{user_count}}
+              </div>
+            </div>
+            <div class="col-auto">
+              <span class="material-symbols-outlined">
+                person
+                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-warning shadow h-100 py-2">
         <div class="card-body neomorphic custom-cursor">
           <div class="row no-gutters align-items-center">
@@ -119,6 +161,10 @@ content %}
       </div>
     </div>
   </div>
+
+
+
+  
 
   <!-- Content Row -->
   <div class="row">

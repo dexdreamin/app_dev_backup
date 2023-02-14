@@ -176,9 +176,11 @@
                 <a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#changepasswordModal"> Change Password  </a>
                 <br>
                 <br>
+                {% if current_user.id != 1%}
                 <h5 class="card-title custom-cursor mb-4">Account Removal </h5>
                 <p>Warning Account Deletion Cannot be undone</p>
                 <a href="" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteprofileModal" type="reset"><i class="glyphicon glyphicon-repeat"></i>Delete Account</a>
+                {% endif %}
             </div> <!-- card-body .// -->
         </article> <!-- card.// -->
         <!-- Password and Authentication Card End-->

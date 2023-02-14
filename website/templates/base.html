@@ -273,8 +273,7 @@
          <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
           <div class="dropdown d-none d-lg-block order-lg-3 my-n2 me-3"><a class="d-block py-2" href="#">
             {% if current_user.profile_pic %}
-            <img class="rounded-circle"  width="40px"
-                src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}">
+            <img class="rounded-circle"  width="40px" height="40px" src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}" style="border-radius: 50%;">
             {% else %}
             <img src="{{ url_for('static', filename='images/avatars/avatar1.jpg')}}"  width="40px" style="border-radius: 50%;">
             {% endif %}
@@ -360,9 +359,9 @@
                       <li><a class="dropdown-item" href="{{ url_for('ticket_requests_page') }}">Ticket Requests</a></li>
                       <li><a class="dropdown-item" href="{{ url_for('ticket_page') }}">Ticket</a></li>
                       <li><a class="dropdown-item" href="{{ url_for('Feedbacks') }}">User Feedbacks</a></li>
-                      <li><a class="dropdown-item"href="{{ url_for('warranty_view') }}">View warranty</a></li>
-                      <li><a class="dropdown-item"href="{{ url_for('create_warranty') }}">Add warranty</a></li>
-                      <li><a class="dropdown-item"href="{{ url_for('Booking_Page') }}">Booking</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('warranty_view') }}">View warranty</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('create_warranty') }}">Add warranty</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('Booking_Page') }}">Booking</a></li>
 
                     </ul>
                   </li>
@@ -419,7 +418,7 @@
               </li>
               <li class="nav-item dropdown d-lg-none"><a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Profile
                 {% if current_user.profile_pic %}
-                <img class="rounded-circle me-2" src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}" width="30"></a>
+                <img class="rounded-circle me-2" src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}" width="50px" height="40px"></a>
                 {% else %}
                 <img class="rounded-circle me-2"src="{{ url_for('static', filename='images/avatars/avatar1.jpg')}}" width="30"></a>
                 {% endif %}
