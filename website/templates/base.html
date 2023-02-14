@@ -287,7 +287,7 @@
                 <img src="{{ url_for('static', filename='images/avatars/avatar1.jpg')}}"  width="40px" style="border-radius: 50%;">
                 {% endif %}
                 <div class="ps-2">
-                  <h6 class="fs-base text-light mb-0">Admin</h6>
+                  <h6 class="fs-base text-light mb-0">{{ current_user.username }}</h6>
                   <div class="fs-xs py-2">"You have the skills and abilities to achieve great things. Believe in yourself and keep pushing forward."</div>
                 </div>
               </div>
@@ -384,7 +384,6 @@
                     <ul class="dropdown-menu dropdown-menu-dark">
                       <li><a class="dropdown-item" href="{{ url_for('profile_page') }}">View your staff profile</a></li>
                       <li><a class="dropdown-item" href="{{ url_for('ticket_page') }}">Ticket</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('Feedbacks') }}">User Feedbacks</a></li>
                       <li><a class="dropdown-item" href="{{ url_for('Booking_Page') }}">Booking</a></li>
                        
                     </ul>

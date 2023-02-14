@@ -323,7 +323,7 @@ def delete_profile():
     db.session.commit()
     logout_user()
     flash("Account Deleted Successfully", category="success")
-    return redirect(url_for("home_page"))
+    return redirect(url_for("landing_page"))
 
 
 @app.route('/deleteRetailProfile/<int:id>')
@@ -2981,8 +2981,7 @@ def pro_login():
     form = LoginForm()
     if form.validate_on_submit():
         # if user exist and if password is correct
-        attempted_user = User.query.filter_by(
-            username=form.username.data).first()
+        attempted_user = User.query.filter_by(username=form.username.data).first()
         if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
             if attempted_user.account_availability(attempted_user.status) == "sven":
                 return redirect(url_for('home_page'))

@@ -1,6 +1,9 @@
-{% if current_user.admin == 1 %} {% extends "base.html" %} {% else %} {% extends
-"based.html" %} {% endif %} {% block title %}Update Retailer {% endblock %} {%
-block content %}
+{% if current_user.usertype == "staff" or current_user.admin == 1 %} 
+{% extends "base.html" %} 
+{% else %} 
+{% extends "based.html" %} 
+{% endif %} 
+{% block title %}Update Retailer {% endblock %} {% block content %}
 <style>
   .smalling {
     width: 50%;
