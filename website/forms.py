@@ -311,10 +311,16 @@ class Update_User_Admin(FlaskForm):
             # check if email_address is not 'None'.
             raise ValidationError(
                 "Email Address already exist. Please try a different email address.")
+    def password_update_admin(self, password_to_check):
+        password = User.query.filter_by(password = password_to_check.data).first()
+        if password:
+            raise ValidationError("Password already in use. Please try a new password.")
     username = StringField(label='User Name:', validators=[
                            Length(min=2, max=30), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[
                                Email(), Length(min=1, max=150), DataRequired()])
+    password = PasswordField(label='Password:', validators=[Length(min=8), DataRequired(), Regexp(
+        r'[A-Za-z0-9@#$%^&+=]', message='Password must contain at least 1 uppercase, 1 lowercase, 1 digit and 1 special character')])
     submit = SubmitField(label='Add Event')
 
 

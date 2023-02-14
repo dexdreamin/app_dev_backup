@@ -3532,6 +3532,8 @@ def user_management():
 @login_required
 def user_management_update(id):
     userID = User.query.filter_by(id=id).first()
+    update_password_form = Update_Password()
+
     form = Update_User_Admin()
 
     if request.method == 'POST' and form.validate_on_submit:
@@ -3539,6 +3541,7 @@ def user_management_update(id):
         # Also note that below does not work
         userID.username = form.username.data
         userID.email_address = form.email_address.data
+        userID.password = form.password.data
         db.session.commit()
         flash("User's Particulars updated to database successfully!",
               category="success")
@@ -3546,7 +3549,7 @@ def user_management_update(id):
         flash("Some error occurred!", category="danger")
 
     if request.method == 'GET':
-        return render_template('Update_User_Management.html', form=form, user=userID)
+        return render_template('Update_User_Management.html', form=form, user=userID, password_form=update_password_form)
 
     flash(form.errors, category="danger")
     return redirect(url_for('user_management'))
