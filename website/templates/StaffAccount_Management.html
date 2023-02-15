@@ -28,8 +28,7 @@
                             <th>Username</th>
                             <th>Company Email Address</th>
                             <th>Account Status</th>
-                            <th>Update</th>
-                            <th>Disabled</th>
+                            <th>Enable/disable account</th>
                         </tr>
                     </thead>
 
@@ -46,11 +45,6 @@
                                     <td>{{user.username}}</td>
                                     <td>{{user.email_address}}</td>
                                     <td>{{user.status}}</td>
-                                    <td>
-                                        <form action="{{url_for('staff_management_update', id=user.id)}}" method="GET">
-                                            <input type="submit" value="Update User" class="btn btn-outline btn-info">
-                                        </form>
-                                    </td>
                                     <td>
         <!--                            <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo&#45;&#45;{{user.id}}">Update User</button>-->
                                     <!--data-target go check the id tag in 'items_modals.html'
@@ -69,11 +63,6 @@
                                     <td>{{user.username}}</td>
                                     <td>{{user.email_address}}</td>
                                     <td>{{user.status}}</td>
-                                    <td>
-                                        <form action="{{url_for('staff_management_update', id=user.id)}}" method="GET">
-                                            <input type="submit" value="Update User" class="btn btn-outline btn-info">
-                                        </form>
-                                    </td>
                                     <td>
                                     <form action="{{url_for('staff_management_enable', id=user.id)}}" method="POST">
                                         <input type="submit" value="Enable Account" class="btn btn-outline btn-success">

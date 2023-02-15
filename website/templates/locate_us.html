@@ -1,16 +1,60 @@
-{% if current_user.is_authenticated == True %}
-{% if current_user.admin == 1 %}
-{% extends "base.html" %}
-{% else %}
-{% extends "based.html" %}
-{% endif %}
-{% else %}
-{% extends "base2.html" %}
-{% endif %}
-{% block title %}Locate our shops!{% endblock %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-{% block content %}
+<style>
+    body {
+        background-color: #eff7ff;
+        padding: 1rem;
+        display:flex;
+        flex-flow: column nowrap;
+        
+    }
 
+    h1 {
+        text-align: center;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .card {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        background-color: #ffffff;
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .card-text {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn {
+        background-color: #0079d3;
+        border-color: #0079d3;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .btn:hover {
+        background-color: #0062a2;
+        border-color: #005b99;
+    }
+</style>
 
 <h1>Locate our official retail shops!</h1>
 <br>
@@ -44,5 +88,6 @@
     {% endif %}
 
     <br>
+    
 {% endfor %}
-{% endblock %}
+<a href="javascript:history.back()" class="btn btn-primary">Back</a>

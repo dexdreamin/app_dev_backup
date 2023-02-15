@@ -323,7 +323,7 @@ def delete_profile():
     db.session.commit()
     logout_user()
     flash("Account Deleted Successfully", category="success")
-    return redirect(url_for("home_page"))
+    return redirect(url_for("landing_page"))
 
 
 @app.route('/deleteRetailProfile/<int:id>')
@@ -1643,7 +1643,7 @@ def Add_Item():
             your_products_dict = Your_Products_Database[str(current_user.id)]
         else:
             Your_Products_Database[str(current_user.id)] = your_products_dict
-
+        
     except IOError:
         print("Unable to Read File")
 
@@ -1703,6 +1703,7 @@ def Add_Item():
                     print('Item added')
                     Item_Database.close()
                     Your_Products_Database.close()
+                
                     break
                 else:
                     continue
@@ -2478,7 +2479,7 @@ def register_staff_account():
             flash(
                 f"Success! Account {user_to_create.username} created!", category='success')
 
-            return redirect(url_for('landing_page'))
+            return redirect(url_for('register_staff_account'))
 
     return render_template('registerStaffAccount.html', form=form, staff=staff)
 
@@ -2808,11 +2809,21 @@ def register_page():
 @app.route('/logout')
 @login_required
 def logout_page():
-    logout_user()
     # to log out the current logged in user
     # the category for flash will decide the color of the flashed message
     # for instance 'info' is blue, 'danger' is red, 'success' is green.
-    return redirect(url_for("landing_page"))
+    if current_user.usertype == "customers":
+        logout_user()
+        flash("You have been logged out!", category='info')
+        return redirect(url_for("landing_page"))
+    elif current_user.admin == 1:
+        logout_user()
+        flash("You have been logged out!", category='info')
+        return redirect(url_for("landing_pagea"))
+    else:
+        logout_user()
+        flash("You have been logged out!", category='info')
+        return redirect(url_for("pro_login"))
     # flash("You have been logged out!", category='info')
     # redirects user to login page after they are logged out.
 
@@ -2913,21 +2924,22 @@ def landing_page():
     form = LoginForm()
     if form.validate_on_submit():
         # if user exist and if password is correct
-        attempted_user = User.query.filter_by(
-            username=form.username.data).first()
+        attempted_user = User.query.filter_by(username=form.username.data).first()
         if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
             if attempted_user.account_availability(attempted_user.status) == "sven":
                 return redirect(url_for('home_page'))
             elif attempted_user.account_availability(attempted_user.status) != 0:
                 # checks username for valid user and checks if password is correct
                 login_user(attempted_user)
-                # 'login_user' is a built-in function for flask_login
-                flash(
-                    f"Success! You are logged in as: {attempted_user.username}", category='success')
-                if current_user.usertype == "retailers":
-                    return redirect(url_for('retail_homepage'))
-                else:
+                if current_user.usertype == 'customers':
+                    # 'login_user' is a built-in function for flask_login
+                    flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
                     return redirect(url_for('home_page'))
+                else:
+                    logout_user()
+                    flash(f"If you are not a customer, please login to the professional login page side for retailers and staff. ", category='danger')
+                    return redirect(url_for('landing_page'))
+
             else:
                 flash(f"{attempted_user.username} account has been disabled!"
                       f" Please contact Customer Support for more information.", category='danger')
@@ -2936,6 +2948,39 @@ def landing_page():
                   category='danger')
 
     return render_template('Landingbase.html', form=form)
+
+@app.route('/admin', methods=["GET", "POST"])
+def landing_pagea():
+    admin_user()
+
+    db.create_all()
+    # warning very funny error when logging in if passwords are not hashed(check SQlite) it will crash
+    # giving an error of Invalid salt Value error
+    form = LoginForm()
+    if form.validate_on_submit():
+        # if user exist and if password is correct
+        attempted_user = User.query.filter_by(username=form.username.data).first()
+        if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
+            if attempted_user.account_availability(attempted_user.status) == "sven":
+                return redirect(url_for('home_page'))
+            elif attempted_user.account_availability(attempted_user.status) != 0:
+                # checks username for valid user and checks if password is correct
+                login_user(attempted_user)
+                if current_user.admin == 1:
+                    # 'login_user' is a built-in function for flask_login
+                    flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
+                    return redirect(url_for('home_page'))
+                else:
+                    logout_user()
+                    flash(f"This login page is for admins. ", category='danger')
+                    return redirect(url_for('landing_pagea'))
+            else:
+                flash(f"{attempted_user.username} account has been disabled!"
+                      f" Please contact Customer Support for more information.", category='danger')
+        else:
+            flash("Username or Password are not matched! Please try again.", category='danger')
+    
+    return render_template('LandingB.html', form=form)
 
 @app.route('/professional', methods=["GET", "POST"])
 def pro_login():
@@ -2947,21 +2992,24 @@ def pro_login():
     form = LoginForm()
     if form.validate_on_submit():
         # if user exist and if password is correct
-        attempted_user = User.query.filter_by(
-            username=form.username.data).first()
+        attempted_user = User.query.filter_by(username=form.username.data).first()
         if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
             if attempted_user.account_availability(attempted_user.status) == "sven":
                 return redirect(url_for('home_page'))
             elif attempted_user.account_availability(attempted_user.status) != 0:
                 # checks username for valid user and checks if password is correct
                 login_user(attempted_user)
-                # 'login_user' is a built-in function for flask_login
-                flash(
-                    f"Success! You are logged in as: {attempted_user.username}", category='success')
-                if current_user.usertype == "retailers":
-                    return redirect(url_for('retail_homepage'))
+                if current_user.usertype != 'customers':
+                    # 'login_user' is a built-in function for flask_login
+                    flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
+                    if current_user.usertype == "retailers":
+                        return redirect(url_for('retail_homepage'))
+                    else:
+                        return redirect(url_for('home_page'))
                 else:
-                    return redirect(url_for('home_page'))
+                    logout_user()
+                    flash(f"If you are a customer, please login to the customer login page side. ", category='danger')
+                    return redirect(url_for('pro_login'))
             else:
                 flash(f"{attempted_user.username} account has been disabled!"
                       f" Please contact Customer Support for more information.", category='danger')
@@ -3286,8 +3334,13 @@ def create_warranty():
 @login_required
 def update_warranty(id):
     form = UpdatewarrantyForm()
-
-    if request.method == "POST" and form.validate_on_submit():
+    if form.errors != {}:  # If there are not errors from the validations
+        errors = []
+        for err_msg in form.errors.values():
+            errors.append(err_msg)
+        err_message = '<br/>'.join([f'({number}){error[0]}' for number,
+                                   error in enumerate(errors, start=1)])    
+    elif request.method == "POST" and form.validate_on_submit():
 
         warranty_dict = {}
         warranty_db = shelve.open(
@@ -3319,14 +3372,9 @@ def update_warranty(id):
         form.remarks.data = warranty.get_warranty_remarks()
         form.email.data = warranty.get_email()
         form.phone.data = warranty.get_phone_number()
+        
 
-    if form.errors != {}:  # If there are not errors from the validations
-        errors = []
-        for err_msg in form.errors.values():
-            errors.append(err_msg)
-        err_message = '<br/>'.join([f'({number}){error[0]}' for number,
-                                   error in enumerate(errors, start=1)])
-
+    
     return render_template('updatewarranty.html', form=form)
 
 
@@ -4445,7 +4493,6 @@ def update_retailer(id):
             location_db = shelve.open('website/databases/retailer/location.db', 'w')
             location_dict = location_db["Location"]
             location = location_dict.get(id)
-            location.set_location_img(form)
             location.set_company_id(form.company_id.data)
             location.set_location(form.shop.data)
             location.set_email_address(form.email_address.data)
@@ -4592,6 +4639,7 @@ def register_retail_account(id):
             err_message = '<br/>'.join(
                 [f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
             flash(f'{err_message}', category='danger')
+            return redirect(url_for('register_retail_account', id=current_id))
 
         db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
         try:
