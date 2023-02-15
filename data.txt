@@ -1,0 +1,22 @@
+Retailer:
+Name of outlet: IMM
+Company ID: 234567
+Postal code: 609901
+Unit number: 02-04
+Address: 21 Jurong East Road
+Hotline: 66658268
+Email address: randomshopa@gmail.com164777
+https://www.google.com/maps/place/IMM/@1.3348154,103.7446508,17z/data=!3m1!4b1!4m6!3m5!1s0x31da100ddadb696b:0x82ca15d32e0cc595!8m2!3d1.3348154!4d103.7468395!16s%2Fm%2F02qw8_3?coh=&entry=tt
+
+
+Hillion Mall:
+https://goo.gl/maps/mfffBfKPJjov4HkQ6
+
+
+Retailer login:
+Username: Shop A
+Password: m4L2G0G1@
+
+Staff login:
+Username: Winnie
+Password: m4L2G0G1@

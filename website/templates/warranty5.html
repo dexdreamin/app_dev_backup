@@ -31,16 +31,16 @@
                       <th>Phone Number</th>
                       <th> Email </th>
                       <th> UUID </th>
-                      <th>Warranty End</th>
-                      <th>Start Date </th>
-                      <th>Start Time</th>
+                      <th>Location Address</th>
+                      <th>Warranty End Date </th>
+                      <th>Postal Code</th>
                       <!-- If not lazy, can use supplied products instead of remarks -->
                       <th></th>
                     </tr>
                   </thead>
 
 
-                    <tbody>
+                   
                       <tbody>
                         {% for warranty in warranty_list %}
                         <tr>
@@ -59,10 +59,12 @@
                     {% endif %}
                         
                     {% endfor %}
+                    <tr><h1>Avaliable</h1></tr>
                     </tbody>
+                    
 
                 </table>
-
+                  <h1>Expired</h1>
             </div>
         </div>
     </div>

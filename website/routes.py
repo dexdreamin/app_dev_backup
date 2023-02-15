@@ -2816,15 +2816,10 @@ def logout_page():
         logout_user()
         flash("You have been logged out!", category='info')
         return redirect(url_for("landing_page"))
-    elif current_user.admin == 1:
-        logout_user()
-        flash("You have been logged out!", category='info')
-        return redirect(url_for("landing_pagea"))
     else:
         logout_user()
         flash("You have been logged out!", category='info')
-        return redirect(url_for("pro_login"))
-    # flash("You have been logged out!", category='info')
+        return redirect(url_for("landing_pagea"))
     # redirects user to login page after they are logged out.
 
 
@@ -2932,12 +2927,16 @@ def landing_page():
                 # checks username for valid user and checks if password is correct
                 login_user(attempted_user)
                 if current_user.usertype == 'customers':
-                    # 'login_user' is a built-in function for flask_login
-                    flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
-                    return redirect(url_for('home_page'))
+                    if current_user.usertype == 'retailers':
+                        flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
+                        return redirect(url_for('retail_homepage'))
+                    else:
+                        # 'login_user' is a built-in function for flask_login
+                        flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
+                        return redirect(url_for('home_page'))
                 else:
                     logout_user()
-                    flash(f"If you are not a customer, please login to the professional login page side for retailers and staff. ", category='danger')
+                    flash(f"This login page is for customers only.  ", category='danger')
                     return redirect(url_for('landing_page'))
 
             else:
@@ -2966,13 +2965,16 @@ def landing_pagea():
             elif attempted_user.account_availability(attempted_user.status) != 0:
                 # checks username for valid user and checks if password is correct
                 login_user(attempted_user)
-                if current_user.admin == 1:
-                    # 'login_user' is a built-in function for flask_login
-                    flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
-                    return redirect(url_for('home_page'))
+                if current_user.usertype != 'customers':
+                    if current_user.usertype == 'retailers':
+                        flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
+                        return redirect(url_for('retail_homepage'))
+                    else:
+                        flash(f"Success! You are logged in as: {attempted_user.username}", category='success')
+                        return redirect(url_for('home_page'))
                 else:
                     logout_user()
-                    flash(f"This login page is for admins. ", category='danger')
+                    flash(f"This login page is for admins, staff & retailers.  ", category='danger')
                     return redirect(url_for('landing_pagea'))
             else:
                 flash(f"{attempted_user.username} account has been disabled!"
