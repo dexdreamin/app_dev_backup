@@ -65,12 +65,15 @@
                     <i class="fa fa-solid fa-user-astronaut"></i> &nbsp; Name:
                      <br>
                     <strong>{{ current_user.username }}</strong> &nbsp;
+                    {% if current_user.usertype == 'customers' %}
+                    <a class="btn-link" href="#" data-toggle="modal" data-target="#editUsernameModal">Edit username</a>
+                    {% endif %}
                 </p>
                 <p>
                     <i class="fa fa-regular fa-envelope"></i> &nbsp; Email:
                      <br>
                     <strong>{{ current_user.email_address }}</strong> &nbsp;
-                    {% if current_user.usertype == customers %}
+                    {% if current_user.usertype == 'customers' %}
                     <a class="btn-link" href="#" data-toggle="modal" data-target="#editEmailModal">Edit Email</a>
                     {% endif %}
                 </p>
