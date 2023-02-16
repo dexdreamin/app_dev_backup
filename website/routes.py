@@ -2556,6 +2556,7 @@ def transfer_funds_page():
 def transfer_funds_user_page(id):
     userID = User.query.filter_by(id=id).first()
     username = userID.username
+    user_id = userID.id
     form = TransferFunds()
     # Logs and counters
     logs_dict = {}
@@ -2615,6 +2616,7 @@ def transfer_funds_user_page(id):
             recepient_transaction_log_count = TransactionCounter[str(id)]
         else:
             TransactionCounter[str(id)] = recepient_transaction_log_count
+    
     except IOError:
         print("An Error Has Occurred Trying to Read The Database")
     except Exception as e:
@@ -2667,8 +2669,7 @@ def transfer_funds_user_page(id):
 
             # Logs Database
             LogsDatabase[str(current_user.id)] = logs_dict
-            TransactionLogsDatabase[str(
-                current_user.id)] = transaction_logs_dict
+            TransactionLogsDatabase[str(current_user.id)] = transaction_logs_dict
             LogsDatabase[str(id)] = recepient_logs_dict
             TransactionLogsDatabase[str(id)] = recepient_transaction_logs_dict
             # Counters
@@ -2680,11 +2681,20 @@ def transfer_funds_user_page(id):
             TransactionLogsDatabase.close()
             LogsCounter.close()
             TransactionCounter.close()
-        return render_template('transferUserFunds.html', form=form, username=username)
+        return render_template('transferUserFunds.html', form=form, username=username, userID=userID, id=user_id)
 
     if request.method == 'GET':
-        return render_template('transferUserFunds.html', form=form, username=username)
+        return render_template('transferUserFunds.html', form=form, username=username, userID=userID, id=user_id)
 
+@app.route('/transfer_payment/<int:id>', methods=["GET", "POST"])
+def transfer_payment(id):
+    userID = User.query.filter_by(id=id).first()
+    username = userID.username
+    return render_template('transfer_payment.html', username=username)
+    
+@app.route('/success')
+def success_payment():
+    return render_template('successful_transaction.html')
 
 @app.route('/deposit', methods=['GET', 'POST'])
 @login_required

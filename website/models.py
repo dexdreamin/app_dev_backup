@@ -864,3 +864,20 @@ class Location:
 
     def set_location_img(self, img):
         self.__img = img
+
+class Transaction:
+    def __init__(self, id, transfer):
+        self.__id = id
+        self.__transfer = transfer
+    
+    def set_id(self, id):
+        self.__id = id
+
+    def set_transfer(self, transfer):
+        self.__transfer = transfer
+
+    def get_id(self):
+        return self.__id
+    
+    def get_transfer(self):
+        return self.__transfer

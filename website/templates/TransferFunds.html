@@ -17,7 +17,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Registered Users Database</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Registered Staff Database</h6>
         </div>
         <div class="card-body neomorphic custom-cursor">
             <div class="table-responsive">
@@ -29,19 +29,13 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>User ID</th>
-                            <th>Username</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot>
+                   
 
                     <tbody>
                     {% for user in users %}
-                    {% if user.id != current_user.id%}
+                    {% if user.id != current_user.id and user.usertype == "staff" %}
                         <tr>
-                            <td>{{user.id}}</td>
+                            <td>{{user.staff_id}}</td>
                             <td>{{user.username}}</td>
                             <td>
                             <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo--{{user.id}}">Transfer Funds</button>

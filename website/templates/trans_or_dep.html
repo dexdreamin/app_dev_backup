@@ -9,9 +9,9 @@
 <div class="decision-container" style="display: flexbox; flex-direction: column;">
 
     <!-- Transaction Module -->
-    <div id="TransferButton" >
+    <div id="TransferButton" style="width: 1000px">
         <a href="{{ url_for('transfer_funds_page') }}" class="TransferModalContainer__Button custom-cursor">
-          <h1 class="ContainerWord" id="TransferWord">Transfer Funds</h1>
+          <h1 class="ContainerWord" id="TransferWord">Transfer Payment to Staff</h1>
           <div class="InnerButtonContainer">
             <div class="TransferModalContainer__inner">
               <img class="img1" src="../static/img/Transfer.png" alt="Icon Goes here!">
@@ -21,9 +21,9 @@
       </div>
 
       <!-- Deposit Module -->
-      <div id="DepositButton">
+      <div id="DepositButton" style="width: 1000px">
         <a href="{{ url_for('deposit') }}" class="TransferModalContainer__Button custom-cursor">
-          <h1 class="ContainerWord" id="DepositWord">Deposit Funds</h1>
+          <h1 class="ContainerWord" id="DepositWord">Deposit Payment</h1>
           <div class="InnerButtonContainer">
             <div class="TransferModalContainer__inner">
               <img class="img1" src="../static/img/Deposit.png" alt="Icon Goes here!">
@@ -33,4 +33,6 @@
       </div>
 
 </div>
+<br>
+<br>
 {% endblock %}
