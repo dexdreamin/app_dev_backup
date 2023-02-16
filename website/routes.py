@@ -1234,7 +1234,7 @@ def remove_from_cart():
 @login_required
 def Receipt():
     def createQR(*args: Item):
-        return qrcode.make('www.google.com/Receipt:\n{}\nTotal price:${}'.format('\n'.join(
+        return qrcode.make('Receipt:\n{}\nTotal price:${}'.format('\n'.join(
             [i.get_name() + ',Qty: ' + str(i.get_qty_purchased()) + ',Cost: $' + str(i.get_total_cost()) + ',OrderDate: Feb 16 2023, warranty for 1 year, End-Date: Feb 16 2024' for i in
              args]),
             sum([i.get_total_cost() for i in args])))
