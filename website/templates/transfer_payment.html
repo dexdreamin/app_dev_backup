@@ -1,4 +1,4 @@
-{% extends "based.html" %} 
+{% extends "base.html" %} 
 {% block title %}Payment{% endblock %} 
 {% block content %}
     <style>
@@ -58,7 +58,7 @@
           class="fa fa-info-circle material-icon text-center"
           aria-hidden="true"
         ></i>
-        <h1 class="font-weight-bold material-text">Transfer to {{ username }}</h1>
+        <h1 class="font-weight-bold material-text">Transfer Cash to {{ username }}, SGD {{ transfer }}</h1>
         <br />
         <p class="neomorphism-text">
             Before completing payment, please enter your credit card details.
@@ -70,7 +70,7 @@
               src="https://checkout.stripe.com/checkout.js"
               class="stripe-button neomorphism-btn"
               data-key="pk_test_51KKojDK7ip8kgLQbuRm5DRr5GghiNuicnq8Dgs1UzHDhkDrWp4MlGPmPRU8zSgGj3VdPhkNLzQi6zQvEnwriVP3e00pdHwABJh"
-              data-name="Transfer payment to {{ username }}"
+              data-name="Transfer pay cheque to {{ username }}, SGD {{ transfer }}"
               data-description="myshop purchase"
               data-amount="hello"
               data-currency="sgd"
@@ -82,5 +82,6 @@
         <br />
       </center>
     </div>
+    <br>
     {% endblock %}
     

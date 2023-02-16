@@ -2568,6 +2568,7 @@ def transfer_funds_user_page(id):
     recepient_transaction_logs_dict = {}
     recepient_log_count = 0
     recepient_transaction_log_count = 0
+    transaction_capture_dict = {}
     try:
         LogsDatabase = shelve.open('website/databases/Logs/logs.db', 'c')
         LogsCounter = shelve.open('website/databases/Logs/logscount.db', 'c')
@@ -2575,6 +2576,7 @@ def transfer_funds_user_page(id):
             'website/databases/TransactionLogs/transactionlogs.db', 'c')
         TransactionCounter = shelve.open(
             'website/databases/TransactionLogs/transactionlogscount.db', 'c')
+        TransactionCapture = shelve.open('website/databases/TransactionLogs/transactioncapture.db', 'c')
         if str(current_user.id) in LogsDatabase:
             logs_dict = LogsDatabase[str(current_user.id)]
         else:
@@ -2616,12 +2618,18 @@ def transfer_funds_user_page(id):
             recepient_transaction_log_count = TransactionCounter[str(id)]
         else:
             TransactionCounter[str(id)] = recepient_transaction_log_count
+
+        if 'Transaction' in TransactionCapture:
+            transaction_capture_dict = TransactionCapture['Transaction']
+        else:
+            TransactionCapture['Transaction'] = transaction_capture_dict
     
     except IOError:
         print("An Error Has Occurred Trying to Read The Database")
     except Exception as e:
         print(f"An Unknown Error has occurred, {e}")
 
+    print('c', id)
     if request.method == 'POST':
         if form.validate_on_submit():
             currentuserID = User.query.filter_by(id=current_user.id).first()
@@ -2659,7 +2667,11 @@ def transfer_funds_user_page(id):
                 date_recorded=datetime.now().strftime("%d/%m/%y"),
                 time_recorded=datetime.now().strftime("%I:%M:%S %p")
             )
+            
+            transaction_capture = Transaction(id = id, transfer = form.transfer.data)
             # upate current user dict and counter
+            transaction_capture_dict[id] = transaction_capture
+            print('captured:', id)
             logs_dict[str(log_count)] = log
             transaction_logs_dict[str(transaction_log_count)] = transaction_log
             # update recepient dict and counter
@@ -2677,20 +2689,39 @@ def transfer_funds_user_page(id):
             TransactionCounter[str(current_user.id)] = transaction_log_count
             LogsCounter[str(id)] = recepient_log_count
             TransactionCounter[str(id)] = recepient_transaction_log_count
+            TransactionCapture['Transaction'] = transaction_capture_dict
             LogsDatabase.close()
             TransactionLogsDatabase.close()
             LogsCounter.close()
             TransactionCounter.close()
-        return render_template('transferUserFunds.html', form=form, username=username, userID=userID, id=user_id)
+            TransactionCapture.close()
+            return redirect(url_for('transfer_payment', id=id))
+        return render_template('transferUserFunds.html', form=form, username=username, userID=userID, id=id)
 
     if request.method == 'GET':
-        return render_template('transferUserFunds.html', form=form, username=username, userID=userID, id=user_id)
+        return render_template('transferUserFunds.html', form=form, username=username, userID=userID, id=id)
 
 @app.route('/transfer_payment/<int:id>', methods=["GET", "POST"])
 def transfer_payment(id):
     userID = User.query.filter_by(id=id).first()
     username = userID.username
-    return render_template('transfer_payment.html', username=username)
+    TransactionCapture = shelve.open('website/databases/TransactionLogs/transactioncapture.db', 'r')
+    transaction_capture_dict = {}
+    try:
+        if 'Transaction' in TransactionCapture:
+            transaction_capture_dict = TransactionCapture['Transaction']
+        else:
+            TransactionCapture['Transaction'] = transaction_capture_dict
+
+    except IOError:
+        print("An Error Has Occurred Trying to Read The Database")
+    except Exception as e:
+        print(f"An Unknown Error has occurred, {e}")
+
+    payer = transaction_capture_dict.get(id)
+    transfer = payer.get_transfer()
+
+    return render_template('transfer_payment.html', username=username, transfer=transfer)
     
 @app.route('/success')
 def success_payment():

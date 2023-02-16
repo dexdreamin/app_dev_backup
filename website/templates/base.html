@@ -331,13 +331,15 @@
                   <li class="dropdown-divider"></li>
                 </ul>
               </li>
+              {% if current_user.admin == 1 or current_user.usertype == "staff" %}
               <!-- Menu items-->
-              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Manage Funds</a>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Manage Payment</a>
                 <ul class="dropdown-menu dropdown-menu-dark">
                   <li><a class="dropdown-item" href="{{ url_for('transfer_funds_page') }}">Transfer</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('deposit') }}">Deposit</a></li>
                 </ul>
               </li>
+              {% endif %}
               <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Items & Event management</a>
                 <ul class="dropdown-menu dropdown-menu-dark">
                   <li><a class="dropdown-item" href="{{ url_for('warranty_page') }}">Warranty</a></li>

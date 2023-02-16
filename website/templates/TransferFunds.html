@@ -3,7 +3,7 @@
 {% else %}
 {% extends "based.html" %}
 {% endif %}
-{% block title %}Transfer Funds{% endblock %}
+{% block title %}Transfer Pay cheque{% endblock %}
     <!-- Custom styles for this page -->
     <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 {% block content %}
@@ -11,8 +11,8 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Transfer Funds</h1>
-    <p class="mb-4">Welcome {{current_user.username}}! Please search for a user in the table to start transferring funds </p>
+    <h1 class="h3 mb-2 text-gray-800">Transfer Pay cheque</h1>
+    <p class="mb-4">Welcome {{current_user.username}}! Please search for a staff in the table to start transferring funds </p>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -24,9 +24,9 @@
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>User ID</th>
-                            <th>Username</th>
-                            <th>Action</th>
+                            <th>Staff ID</th>
+                            <th>Staff username</th>
+                            <th>Payment action</th>
                         </tr>
                     </thead>
                    
@@ -38,7 +38,7 @@
                             <td>{{user.staff_id}}</td>
                             <td>{{user.username}}</td>
                             <td>
-                            <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo--{{user.id}}">Transfer Funds</button>
+                            <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo--{{user.id}}">Transfer Payment</button>
                             <!--data-target go check the id tag in 'items_modals.html'
                             near the more Info comment section it targets that to give
                             each specific item its specific name in title and description -->
@@ -62,12 +62,12 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Transfer Funds Transaction</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Transfer Pay Cheque Transaction</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Transfer Funds to {{user.username}}?
+                <div class="modal-body">Transfer Pay Cheque to {{user.username}}?
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
