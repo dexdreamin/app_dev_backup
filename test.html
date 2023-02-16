@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Directory of URL</title>
+</head>
+<body>
+	<h1>Directory of URL</h1>
+	<p>The directory of the URL is: <span id="directory"></span></p>
+
+	<script>
+		// Get the directory of the URL
+		var pathArray = window.location.pathname.split('/');
+		var directory = pathArray[1];
+
+		// Set the directory text in the HTML
+		document.getElementById("directory").innerHTML = directory;
+	</script>
+</body>
+</html>
