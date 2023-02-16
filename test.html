@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Directory of URL</title>
+	<title>Subdirectories of URL</title>
 </head>
 <body>
-	<h1>Directory of URL</h1>
-	<p>The directory of the URL is: <span id="directory"></span></p>
+	<h1>Subdirectories of URL</h1>
+	<ul id="subdirectories"></ul>
 
 	<script>
-		// Get the directory of the URL
+		// Get the subdirectories of the URL
 		var pathArray = window.location.pathname.split('/');
-		var directory = pathArray[1];
+		var subdirectories = [];
 
-		// Set the directory text in the HTML
-		document.getElementById("directory").innerHTML = directory;
+		// Loop through the path array to get the subdirectories
+		for (var i = 1; i < pathArray.length; i++) {
+			if (pathArray[i]) {
+				subdirectories.push(pathArray[i]);
+			}
+		}
+
+		// Set the subdirectories in the HTML
+		var subdirectoriesList = document.getElementById("subdirectories");
+		for (var j = 1; j < subdirectories.length; j++) {
+			var subdirectoryItem = document.createElement("li");
+			subdirectoryItem.appendChild(document.createTextNode(subdirectories[j]));
+			subdirectoriesList.appendChild(subdirectoryItem);
+		}
 	</script>
 </body>
 </html>
