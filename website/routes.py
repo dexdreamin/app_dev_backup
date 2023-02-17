@@ -26,8 +26,7 @@ from uuid import uuid1
 from sqlalchemy import func
 from flask import Flask, request
 from dotenv import load_dotenv
-from flask_cors import CORS
-import os, requests
+
 # To ensure file name is parsed
 
 # Note that for otp expiry, need to fiddle with js
