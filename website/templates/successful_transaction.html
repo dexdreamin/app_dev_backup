@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Transaction successful!{% endblock %}
+{% block content %}
+<div class="container">
+    <img style="display: block; margin-left: auto; margin-right: auto;" width="100px" src="{{ url_for('static', filename='img/green_tick.png') }}" style="width: 500px; height: 500px;" alt="">
+    <h3 style="text-align: center;">Transaction successful!</h3>
+</div>
+<br>
+<br>
+<div style="text-align: center;">
+    <a class="btn btn-primary" href="{{ url_for('home_page') }}">Return to home</a>
+</div>
+<br>
+<br>
+<br>
+<style>
+    .vertical-center {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+</style>
+{% endblock %}

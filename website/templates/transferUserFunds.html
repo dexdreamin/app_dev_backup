@@ -3,7 +3,7 @@
 {% else %}
 {% extends "based.html" %}
 {% endif %}
-{% block title %}Deposit Funds Page{% endblock %}
+{% block title %}Transfer Pay cheque{% endblock %}
 <!-- Custom fonts for this template-->
 <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link
@@ -19,17 +19,17 @@
 
 <body>
 <div class="container-fluid">
-    <h1>Transfer Funds</h1>
+    <h1>Transfer Pay cheque</h1>
     <div class="container">
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body neomorphic custom-cursor p-0">
                 <!-- Nested Row within Card Body -->
-                <div class="row">
+                <div class="row" style="width: 1000px">
                     <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Transfer Funds to {{username}}</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Transfer Pay Cheque to {{username}}</h1>
                             </div>
                             <form class="user" method="POST">
                                 {{ form.hidden_tag() }}

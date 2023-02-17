@@ -23,7 +23,7 @@
     <!-- Earnings Card  -->
     
     <div class="col-xl-3 col-md-6 mb-3">
-      {% if current_user.admin == 1 %}
+      {% if current_user.admin == 1 or current_user.usertype == "staff" %}
       <div class="card border-left-primary shadow h-100 py-2">
         <div class="card-body neomorphic custom-cursor">
           
@@ -186,7 +186,7 @@
     <div class="col-xl-8 col-lg-7">
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
-        {% if current_user.id == 1 %}
+        {% if current_user.id == 1 or current_user.usertype == "staff" %}
         <div
           class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
         >
