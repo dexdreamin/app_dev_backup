@@ -24,6 +24,10 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 from uuid import uuid1
 from sqlalchemy import func
+from flask import Flask, request
+from dotenv import load_dotenv
+from flask_cors import CORS
+import os, requests
 # To ensure file name is parsed
 
 # Note that for otp expiry, need to fiddle with js
@@ -1285,6 +1289,7 @@ def Receipt():
 
     # args are items objects ,the * means accept all args yes, you can put as many arguments as you want.
     # Also creates a QR code
+    
 
     def toB64String(image: PIL):
         buffered = io.BytesIO()
@@ -1324,7 +1329,7 @@ def Receipt():
     current_day = datetime.now().strftime("%d")
     expected_delivery_date = datetime.now().strftime(
         f"{int(current_day) + 2}/%m/%Y")
-
+    
     return render_template('Receipt.html', cart_items=Cart_Dict, total=total, order_date=order_date, expiration_date=expiration_date,
                            expected_delivery_date=expected_delivery_date,
                            qr_code=toB64String((createQR(*Cart_Dict.values()))))
@@ -2505,16 +2510,7 @@ def register_staff_account():
                 db_tempemail.close()
                 return redirect(url_for('register_staff_account'))
             
-            '''
-            staff_db = shelve.open('/website/databases/staff/staff.db', 'c')
-            try:
-                staff_dict = staff_db['Staff']
-                
-            except Exception as e:
-                print(f'{e} error has occurred! Database will close!')
-                
-                return redirect(url_for('register_staff_account'))
-            '''
+            
 
             msg = Message('Login credentials for staff account creation', sender='agegracefullybothelper@gmail.com',
                           recipients=[form.work_email.data])
@@ -5346,18 +5342,27 @@ def post_comment():
         blog_id = str(len(db) + 1)
         db[blog_id] = comment
     return redirect(url_for("bloga"))
+@app.route('/login', methods=['POST'])
+def login():
+    response = requests.get('https://api.chatengine.io/users/me/', 
+        headers={ 
+            "Project-ID": os.environ['b59e386a-0e1b-4f8f-850a-47c5377928aa'],
+            "User-Name": request.get_json()['username'],
+            "User-Secret": request.get_json()['secret']
+        }
+    )
+    return response.json()
 
-@app.route("/delete_comment/<blog_id>", methods=["POST"])
-def delete_comment(blog_id):
-    with shelve.open("website/databases/retailer/bloga.db") as db:
-        del db[blog_id]
-    return redirect(url_for("bloga"))
-
-@app.route("/edit_comment/<blog_id>", methods=["GET", "POST"])
-def edit_comment(blog_id):
-    with shelve.open("website/databases/retailer/bloga.db") as db:
-        if request.method == "GET":
-            return render_template("bloge.html", comment=db[blog_id], blog_id=blog_id)
-        else:
-            db[blog_id] = request.form["comment"]
-            return redirect(url_for("bloga"))
+@app.route('/signup', methods=['POST'])
+def signup():
+    response = requests.post('https://api.chatengine.io/users/', 
+        data={
+            "username": request.get_json()['username'],
+            "secret": request.get_json()['secret'],
+            "email": request.get_json()['email'],
+            "first_name": request.get_json()['first_name'],
+            "last_name": request.get_json()['last_name'],
+        },
+        headers={ "Private-Key": os.environ['85c01b36-6d43-4872-b33e-b798f31dd1e9'] }
+    )
+    return response.json()

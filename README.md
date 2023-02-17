@@ -1,52 +1,4 @@
 
-## 💁‍♀️ How to use
-
-- Install Python requirements `pip install -r requirements.txt`
-- Start the server for development `python3 main.py`
-
-Admin Account
-
-username:admin
-email:admin@gmail.com
-password:admin123
-
-Retail sample account
-
-username: retailA
-email: retailA@gmail.com
-password: m4l2g0g1
-
-
-Other Users:
-
-username: Sam
-email: Sam@gmail.com
-password: 1234567
-
-                   ,d"=≥,.,qOp,
-                 ,7'  ''²$(  )
-                ,7'      '?q$7'
-             ..,$$,.
-   ,.  .,,--***²""²***--,,.  .,
- ²   ,p²''              ''²q,   ²
-:  ,7'                      '7,  :
- ' $      ,db,      ,db,      $ '
-  '$      ²$$²      ²$$²      $'    
-  '$                          $'        
-   '$.     .,        ,.     .$'
-    'b,     '²«»«»«»²'     ,d'
-     '²?bn,,          ,,nd?²'
-       ,7$ ''²²²²²²²²'' $7,
-     ,² ²$              $² ²,
-     $  :$              $:  $
-     $   $              $   $
-     'b  q:            :p  d'
-      '²«?$.          .$?»²'
-         'b            d'
-       ,²²'?,.      .,?'²²,
-      ²==--≥²²==--==²²≤--==²
-
-nicehe
 
 # NYP-App-Developent-Project
 
@@ -70,31 +22,29 @@ This project includes the use of python and its libraries to create a functional
  Done by Mervyn, Dexter, Matthew, Sven
 
 
-To whoever is reading this, here is the general story
-Hoe ming wei's grp used starter bootstrap, so sb just mean the bootstrap
-He then used the sample flask project from the frrecodecamp for SQL stuff
-He made the website to be like a banking system, hence the deposit and transfer
+Website link 1
+https://appdevbackup.dexterkhoowc.repl.co/
 
-Original version is the one at iamsven2005/flask repo, it is curently on replit
+Website Link backup (past version)
+https://flask.tansven.repl.co
 
 
-Our idea is to make it work like we are actually ding for a company so that we can use it the portfolio for a business sample.
+Env is here in case it gets lost during git zip issue
+SECRET_KEY = '8fc3212d5891a594defe7d20'
+MAIL_USERNAME = 'agegracefullymailbot@gmail.com'
+MAIL_PASSWORD = 'nsjlrpsmqbscomce'
 
-A few feature were added on the flask repo:
-Retail, warranty, fixed many bugs, realised it was intended for a ctf
+Company we are and will be working with:
+https://agegracefully.shop/
 
-Risky branch is recommended for risky stuff.
+Chat api: https://chatengine.io/
+Set up api id and keys if expired
 
-Tips:
-Presentation, focus on admin side
-Week 13: CRUD for all memebers ( try to integrate), have more than 2 bs templates
-(go to boostrap websites to pirate source code in a test file)
+We hope that you like our project
+yours sincerely,
+the team
 
-Week 15: Validation messages (make sure there are messages)
-Week 18: Think of the story line
-
-If possible, refactor the code before running, run main.py, temp runner is for turning off werkzeug
-
-Make base.html your default, and based your bootstrap template
-
-Hope this helps!
+               __
+             <(o )___
+              ( ._> /
+               `---'   meow
