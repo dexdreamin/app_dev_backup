@@ -20,3 +20,13 @@ Password: m4L2G0G1@
 Staff login:
 Username: Winnie
 Password: m4L2G0G1@
+
+Customer:
+dexdreamin
+m4L2G0G1!
+
+Admin:
+admin
+admin123
+
+Submitted by sven, matthew, dexter, and mervyn
