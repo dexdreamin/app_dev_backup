@@ -1,4 +1,4 @@
-{% if current_user.admin == 1 %}
+{% if current_user.admin == 1 or current_user.usertype == "staff" %}
 {% extends "base.html" %}
 {% else %}
 {% extends "based.html" %}
@@ -7,7 +7,37 @@
 
 {% block content %}
 <div class="decision-container" style="display: flexbox; flex-direction: column;">
+    {% if current_user.usertype == "staff" %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-text">Overall earnings: </h5>
+        <h1 class="card-title">SGD {{ current_user.budget }}</h1>
+        
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-text">Total earnings of the month: </h5>
+        <h1 class="card-title">SGD {{ total_staff_earning }}</h1>
+        
+      </div>
+    </div>
 
+    <br>
+    <br>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-text">Earnings as of {{ current_time }}</h5>
+        <h1 class="card-title">SGD {{ current_staff_earning }}</h1>
+        
+      </div>
+    </div>
+    <br>
+    <br>
+    {% endif %}
+    {% if current_user.admin == 1 %}
     <!-- Transaction Module -->
     <div id="TransferButton" style="width: 1000px">
         <a href="{{ url_for('transfer_funds_page') }}" class="TransferModalContainer__Button custom-cursor">
@@ -19,6 +49,7 @@
           </div>
         </a>
       </div>
+      {% endif %}
 
       <!-- Deposit Module -->
       <div id="DepositButton" style="width: 1000px">
@@ -31,6 +62,8 @@
           </div>
         </a>
       </div>
+
+    
 
 </div>
 <br>

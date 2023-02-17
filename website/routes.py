@@ -211,6 +211,50 @@ def photo(photo_id):
 @app.route('/moneymanagement')
 @login_required
 def money_management():
+    id = current_user.id
+    transaction_capture_dict = {}
+    earning_capture_dict = {}
+    TransactionCapture = shelve.open('website/databases/TransactionLogs/transactioncapture.db', 'r')
+    TimeCapture = shelve.open('website/databases/time/timecapture.db', 'c')
+    EarningCapture = shelve.open('website/databases/TransactionLogs/earning.db', 'c')
+
+    try:
+        if 'Transaction' in TransactionCapture:
+            transaction_capture_dict = TransactionCapture['Transaction']
+        else:
+            TransactionCapture['Transaction'] = transaction_capture_dict
+
+        if 'TimeCapture' in TimeCapture:
+            time_capture_dict = TimeCapture['TimeCapture']
+        else:
+            TimeCapture['TimeCapture'] = time_capture_dict
+
+        
+        if 'Earning' in EarningCapture:
+            earning_capture_dict = EarningCapture['Earning']
+        else:
+            EarningCapture['Earning'] = earning_capture_dict
+
+
+    except IOError:
+        print("An Error Has Occurred Trying to Read The Database")
+    except Exception as e:
+        print(f"An Unknown Error has occurred, {e}")
+
+    if current_user.usertype == 'staff':
+        current_staff = transaction_capture_dict.get(id)
+        current_staff_earning = current_staff.get_transfer()
+        current_time = time_capture_dict.get(id)
+        total_staff_earning = earning_capture_dict.get(id)
+
+        return render_template('trans_or_dep.html', current_staff_earning=current_staff_earning, current_time=current_time, total_staff_earning=total_staff_earning)
+
+    
+
+
+    #flash(f'You have received SGD {current_staff_earning} from admin!', category='info')
+
+    
     return render_template('trans_or_dep.html')
 
 
@@ -1916,6 +1960,7 @@ def Purchase_Item():
             'website/databases/Owned_Items/ownedItems.db', 'c')
         Shopping_Cart_Database = shelve.open(
             'website/databases/shoppingcart/cart.db', 'c')
+        
         if 'ItemInfo' in Item_Database:
             Items_Dict = Item_Database['ItemInfo']
         else:
@@ -2537,7 +2582,7 @@ def staff_information(id):
     retailer_db = shelve.open('website/databases/staff/staff.db', 'w')
     retailer_dict = retailer_db["Retailers"]
 
-    current_retail = retailer_dict.get(id-7)
+    current_retail = retailer_dict.get(id)
     print(current_retail)
     retailer_db.close()
 
@@ -2569,6 +2614,8 @@ def transfer_funds_user_page(id):
     recepient_log_count = 0
     recepient_transaction_log_count = 0
     transaction_capture_dict = {}
+    time_capture_dict = {}
+    earning_capture_dict = {}
     try:
         LogsDatabase = shelve.open('website/databases/Logs/logs.db', 'c')
         LogsCounter = shelve.open('website/databases/Logs/logscount.db', 'c')
@@ -2577,6 +2624,9 @@ def transfer_funds_user_page(id):
         TransactionCounter = shelve.open(
             'website/databases/TransactionLogs/transactionlogscount.db', 'c')
         TransactionCapture = shelve.open('website/databases/TransactionLogs/transactioncapture.db', 'c')
+        TimeCapture = shelve.open('website/databases/time/timecapture.db', 'c')
+        EarningCapture = shelve.open('website/databases/TransactionLogs/earning.db', 'c')
+
         if str(current_user.id) in LogsDatabase:
             logs_dict = LogsDatabase[str(current_user.id)]
         else:
@@ -2623,13 +2673,25 @@ def transfer_funds_user_page(id):
             transaction_capture_dict = TransactionCapture['Transaction']
         else:
             TransactionCapture['Transaction'] = transaction_capture_dict
-    
+
+        if 'TimeCapture' in TimeCapture:
+            time_capture_dict = TimeCapture['TimeCapture']
+        else:
+            TimeCapture['TimeCapture'] = time_capture_dict
+
+        if 'Earning' in EarningCapture:
+            earning_capture_dict = EarningCapture['Earning']
+            earning_count = earning_capture_dict.get(id)
+        else:
+            EarningCapture['Earning'] = earning_capture_dict
+            earning_count = 0
+        
     except IOError:
         print("An Error Has Occurred Trying to Read The Database")
+
     except Exception as e:
         print(f"An Unknown Error has occurred, {e}")
 
-    print('c', id)
     if request.method == 'POST':
         if form.validate_on_submit():
             currentuserID = User.query.filter_by(id=current_user.id).first()
@@ -2641,6 +2703,7 @@ def transfer_funds_user_page(id):
             transaction_log_count += 1
             recepient_log_count += 1
             recepient_transaction_log_count += 1
+            earning_count += form.transfer.data
             log = Logs(
                 id=str(log_count),
                 log_description=f'${form.transfer.data} was transferred to {userID.username}',
@@ -2671,13 +2734,13 @@ def transfer_funds_user_page(id):
             transaction_capture = Transaction(id = id, transfer = form.transfer.data)
             # upate current user dict and counter
             transaction_capture_dict[id] = transaction_capture
-            print('captured:', id)
+            earning_capture_dict[id] = earning_count
+            time_capture_dict[id] = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
             logs_dict[str(log_count)] = log
             transaction_logs_dict[str(transaction_log_count)] = transaction_log
             # update recepient dict and counter
             recepient_logs_dict[str(recepient_log_count)] = recepient_log
-            recepient_transaction_logs_dict[str(
-                recepient_transaction_log_count)] = recepient_transaction_log
+            recepient_transaction_logs_dict[str(recepient_transaction_log_count)] = recepient_transaction_log
 
             # Logs Database
             LogsDatabase[str(current_user.id)] = logs_dict
@@ -2690,11 +2753,15 @@ def transfer_funds_user_page(id):
             LogsCounter[str(id)] = recepient_log_count
             TransactionCounter[str(id)] = recepient_transaction_log_count
             TransactionCapture['Transaction'] = transaction_capture_dict
+            TimeCapture['TimeCapture'] = time_capture_dict
+            EarningCapture['Earning'] = earning_capture_dict
             LogsDatabase.close()
             TransactionLogsDatabase.close()
             LogsCounter.close()
             TransactionCounter.close()
             TransactionCapture.close()
+            TimeCapture.close()
+            EarningCapture.close()
             return redirect(url_for('transfer_payment', id=id))
         return render_template('transferUserFunds.html', form=form, username=username, userID=userID, id=id)
 

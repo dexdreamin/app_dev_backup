@@ -19,7 +19,11 @@
 <!-- Transfer Funds/ Deposit Page -->
 <div id="TransferModalContainer" class="custom-cursor">
   <a href="{{ url_for('money_management') }}" class="TransferModalContainer__Button custom-cursor">
+    {% if current_user.admin == 1 %}
     <h1 class="ContainerWord" id="TransferContainerWord">Transfer/ Deposit Payment</h1>
+    {% else %}
+    <h1 class="ContainerWord" id="TransferContainerWord">View your pay cheques/earnings</h1>
+    {% endif %}
     <div class="InnerButtonContainer">
       <div class="TransferModalContainer__inner">
         <img class="img1" src="../static/img/transaction_icon.png" alt="Icon Goes here!">
